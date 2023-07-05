@@ -25,9 +25,9 @@ A relaying peer/server needs to know if the sender is allowed to send to this re
 
 So, in the ordinary postal system, you write my name and address on an envelope and send it to me. This enables unsolicited mail. But suppose we only allow mail in envelopes that have already been authorized by the sender?
 
-So, I give you a one-time private key, plus i sign a statement that says the corresponding public key is allowed to post me a message, before some expiry time. You could call this a  "send certificate". It's one per message. So I send you several at a time, so you can send me say 20 messages.
+So, I give you a one-time private key, plus i sign a statement that says the corresponding public key is allowed to post me a message, before some expiry time. You could call this a "send certificate". It's one per message. So I send you several at a time, so you can send me say 20 messages.
 
-You encrypt your message to me, then sign it with the private key in the send cert, then broadcast the cyphertext, signature, send cert and recipient. A relaying peer checks that cert has not expired, and is actually signed by the recipient, and that the cyphertext is signed by the key in the cert.
+You encrypt your message to me, then sign it with the private key in the send cert, then broadcast the cyphertext, signature, send cert and recipient. A relaying peer checks that cert has not expired, and is actually **signed by the recipient**, and that **the cyphertext is signed by the key in the cert.**
 
 The relay servers don't need to keep track of certs that have not been used yet, they just need to remember if they have already seen certs. Actually, it doesn't matter if they do this perfectly. Reusing a cert reveals the sender, so well behaved senders won't do that. I would have relays remember certs, but only use a bounded amount of memory for that. Relays can forget about certs that have reached their expiry date! Relays only need to remember the hash of the cert and it's expiry date, so it's not even much information. They could keep a bloom filter to it's easy to test the usual case that it's a unique single use of the cert.
 
@@ -54,7 +54,8 @@ Bob could give several certificates to each of their friends, that way it at lea
 
 ---------------------
 
-__How does Bob give out the certificates?__ We need to encrypt a message to Alice, because we need the signing key to be private. If we keep the constraint that the recipient is visible, then that means we can see who Bob is friends with. But, if Bob gives out certificates to each of his friends, then we don't know exactly who Bob is talking to in future DMs.
+__How does Bob give out the certificates?__
+We need to encrypt a message to Alice, because we need the signing key to be private. If we keep the constraint that the recipient is visible, then that means we can see who Bob is friends with. But, if Bob gives out certificates to each of his friends, then we don't know exactly who Bob is talking to in future DMs.
 
 
 ## @Dominic
