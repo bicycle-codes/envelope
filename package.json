@@ -1,11 +1,11 @@
 {
   "name": "@ssc-hermes/envelope",
+  "version": "0.0.0",
   "description": "Envelopes that have been authorized by the recipient",
   "directories": {
     "test": "test"
   },
   "type": "module",
-  "version": "0.0.0",
   "main": "dist/index.js",
   "scripts": {
     "lint": "standardx -v \"./**/*.ts\"",
@@ -14,7 +14,7 @@
     "build-cjs": "esbuild src/*.ts --format=cjs --keep-names --outdir=./dist --out-extension:.js=.cjs",
     "build": "mkdir -p ./dist && rm -rf ./dist/* && npm run build-cjs && tsc",
     "preversion": "npm run lint",
-    "postversion": "git push && git push --tags && npm publish",
+    "postversion": "git push && git push --tags && export $(cat .env | grep -v \"#\" | xargs) && npm publish && npm publish --@ssc-hermes:registry=https://registry.npmjs.org",
     "prepublishOnly": "npm run build"
   },
   "devDependencies": {
