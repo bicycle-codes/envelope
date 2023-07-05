@@ -1,4 +1,9 @@
 {
+  "name": "@ssc-hermes/envelope",
+  "description": "Envelopes that have been authorized by the recipient",
+  "directories": {
+    "test": "test"
+  },
   "type": "module",
   "version": "0.0.0",
   "main": "dist/index.js",
@@ -36,6 +41,17 @@
       ]
     }
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ssc-hermes/envelope.git"
+  },
+  "keywords": [
+    "envelope"
+  ],
+  "bugs": {
+    "url": "https://github.com/ssc-hermes/envelope/issues"
+  },
+  "homepage": "https://github.com/ssc-hermes/envelope#readme",
   "author": "nichoth <nichoth@gmail.com> (https://nichoth.com)",
   "license": "AGPL-3.0-or-later"
 }
