@@ -4,7 +4,8 @@ Envelopes that have been authorized by the recipient
 
 ---------------
 
-__A send certificate__
+__a send certificate__
+
 Could be just a document signed by the recipient, like
 ```js
 {
