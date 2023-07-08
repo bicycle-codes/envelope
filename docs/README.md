@@ -62,3 +62,36 @@ We need to encrypt a message to Alice, because we need the signing key to be pri
 
 correct!
 There are lots of ways that peers can initially exchange send-certs. they can meet in person. bob could have a public presense (aka a website) that has a “request a send cert” button, this would obviously be rate limited etc. alice could also forward one of her send certs for bob to carol, to introduce c to b. This scheme would have all the affordances of email, except revealing the sender and enabling unlimited peers to send you messages
+
+
+
+
+-------------------------------------------------------------
+
+
+[ksSign](https://github.com/oddsdk/ts-odd/blob/main/src/components/crypto/implementation/browser.ts#L195) is exported as `keystore.sign`
+
+* uses `rsaOperations.sign`
+* `rsaOperations` comes from `keystore-idb`
+* this leads to `keystore-idb/rsa/operations`
+
+```ts
+export async function sign(
+  msg: Msg,
+  privateKey: PrivateKey,
+  charSize: CharSize = DEFAULT_CHAR_SIZE
+): Promise<ArrayBuffer> {
+  return webcrypto.subtle.sign(
+    { name: RSA_WRITE_ALG, saltLength: SALT_LENGTH },
+    privateKey,
+    normalizeUnicodeToBuf(msg, charSize)
+  )
+}
+```
+
+
+--------------------------------------------------------------------
+
+
+[keystoreAes.encryptBytes](https://github.com/fission-codes/keystore-idb/blob/main/src/aes/operations.ts#L7)
+
