@@ -25,7 +25,6 @@
     "@ssc-hermes/util": "^0.7.7",
     "json-canon": "^1.0.1",
     "keystore-idb": "^0.15.5",
-    "one-webcrypto": "^1.0.3",
     "uint8arrays": "^4.0.4"
   },
   "devDependencies": {
