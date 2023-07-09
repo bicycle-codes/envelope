@@ -12,6 +12,8 @@ If we assume we are doing this with internet infrastructure (a server), then in 
 
 You could also give out the certificates via other means, like on your website, or via signal message, in which case the server would not know who it is from. Meaning, the server cannot even assume that a message is from your 'friend circle' in the application. It can only see that you got a message at a particular time, we can't infer anything about who it is from.
 
+This is assuming that all the users of the app are well behaved, and not giving out envelopes willy nilly. :thinking:
+
 ## keystore
 The envelopes and encrypted messages created by this library pair with a [keystore](https://github.com/fission-codes/keystore-idb) instance on your device.
 
