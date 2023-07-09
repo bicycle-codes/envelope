@@ -22,6 +22,7 @@
     "@oddjs/odd": "^0.37.2",
     "@ssc-hermes/identity": "^0.0.5",
     "@ssc-hermes/message": "^0.4.7",
+    "@ssc-hermes/util": "^0.7.7",
     "json-canon": "^1.0.1",
     "keystore-idb": "^0.15.5",
     "one-webcrypto": "^1.0.3",

@@ -2,13 +2,15 @@ import { create as createMsg, SignedRequest } from '@ssc-hermes/message'
 import { fromString, toString } from 'uint8arrays'
 import { Crypto } from '@oddjs/odd'
 import { SymmAlg } from 'keystore-idb/types.js'
+import { writeKeyToDid } from '@ssc-hermes/util'
 import {
     aesGenKey,
-    aesEncrypt
+    aesEncrypt,
+    aesDecrypt,
+    // rsaDecrypt
 } from '@oddjs/odd/components/crypto/implementation/browser'
-import { Identity, encryptKey } from '@ssc-hermes/identity'
-import pkg from 'json-canon'
-const { serialize } = pkg
+import { Identity, encryptKey, createDeviceName } from '@ssc-hermes/identity'
+import serialize from 'json-canon'
 
 // {
 //     seq: 0,
@@ -35,7 +37,7 @@ type Content = SignedRequest<{
     mentions?:string[],
 }>
 
-interface EncryptedContent {
+export interface EncryptedContent {
     key:Record<string, string>,  // { deviceName: 'encrypted-key' }
     content:string
 }
@@ -81,6 +83,25 @@ export async function wrapMessage (
         await encryptKeys(me, key)]
 }
 
+export async function decryptMessage (
+    crypto:Crypto.Implementation,
+    msg:EncryptedContent
+) {
+    const did = await writeKeyToDid(crypto)
+    const deviceName = await createDeviceName(did)
+
+    const encryptedKey = msg.key[deviceName]
+
+    const decryptedKey = await crypto.keystore.decrypt(
+        fromString(encryptedKey, 'base64pad')
+    )
+
+    // const decryptedKey = await crypto.keystore.decrypt(crypto.keystore)
+    // const decryptedKey = await rsaDecrypt(msg.content)
+
+    return aesDecrypt(fromString(msg.content, 'base64pad'), decryptedKey, ALGORITHM)
+}
+
 /**
  * Create an envelope -- a certificate. Return a signed certificate object
  * @param crypto odd crypto object
@@ -118,7 +139,7 @@ export async function encryptContent (
     recipient:Identity
 ):Promise<{ key:Keys, content:string }> {
     const encrypted = arrToString(await aesEncrypt(
-        arrFromString(data),
+        new TextEncoder().encode(data),
         key,
         ALGORITHM
     ))
