@@ -14,6 +14,8 @@ You could also give out the certificates via other means, like on your website, 
 
 This is assuming that all the users of the app are well behaved, and not giving out envelopes willy nilly. :thinking:
 
+**⚠️ possible attack vector** -- what if there is an adversarial user of the app? Could keep it by invitation only.
+
 ## keystore
 The envelopes and encrypted messages pair with a [keystore](https://github.com/fission-codes/keystore-idb) instance on your device.
 
