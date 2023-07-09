@@ -54,7 +54,7 @@ import { SignedRequest } from '@ssc-hermes/message'
 
 export type Envelope = SignedRequest<{
     seq:number,
-    expiration:number,
+    expiration?:number,  // default to 1 year from now
     recipient:string,  // the recipient's username
 }>
 ```
