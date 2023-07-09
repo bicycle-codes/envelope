@@ -25,7 +25,7 @@ test('create an envelope', async t => {
 
     t.ok(alicesEnvelope.signature, 'should create an envelope')
     t.equal(alicesEnvelope.recipient, alice.username,
-        'our username should be on the envelope')
+        "alice's username should be on the envelope")
 })
 
 // let alicesKeys:Record<string, string>
@@ -36,8 +36,6 @@ test('put a message in the envelope', async t => {
     const bobsCrypto = await createCryptoComponent()
     bob = await createId(bobsCrypto, { humanName: 'bob' })
 
-    // console.log('**bob**', bob)
-
     const content = await createMsg(bobsCrypto, {
         from: { username: bob.username },
         text: 'hello'
@@ -45,9 +43,7 @@ test('put a message in the envelope', async t => {
 
     const [
         { envelope: returnedEnvelope, message },  // the encrypted message content
-        keys  // map of device name to encrypted key string
-
-        // (from, to, envelope, content)
+        keys  // map of sender's device name to encrypted key string
     ] = await wrapMessage(bob, alice, alicesEnvelope, content)
 
     msgContent = message
@@ -63,11 +59,9 @@ test('put a message in the envelope', async t => {
 
 test('alice can decrypt a message addressed to alice', async t => {
     const decrypted = await decryptMessage(alicesCrypto, msgContent)
-    const str = new TextDecoder().decode(decrypted)
-    t.equal(typeof str, 'string', 'should get a string')
-    const msg = JSON.parse(str)
-    t.equal(msg.from.username, bob.username,
+    t.equal(decrypted.from.username, bob.username,
         "should have bob's username in decrypted message")
+    t.equal(decrypted.text, 'hello', 'should have the original text of the message')
 })
 
 test("carol cannot read alice's message", async t => {

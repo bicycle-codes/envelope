@@ -86,7 +86,7 @@ export async function wrapMessage (
 export async function decryptMessage (
     crypto:Crypto.Implementation,
     msg:EncryptedContent
-) {
+):Promise<Content> {
     const did = await writeKeyToDid(crypto)
     const deviceName = await createDeviceName(did)
 
@@ -96,10 +96,13 @@ export async function decryptMessage (
         fromString(encryptedKey, 'base64pad')
     )
 
-    // const decryptedKey = await crypto.keystore.decrypt(crypto.keystore)
-    // const decryptedKey = await rsaDecrypt(msg.content)
+    const decrypted = await aesDecrypt(
+        fromString(msg.content, 'base64pad'),
+        decryptedKey,
+        ALGORITHM
+    )
 
-    return aesDecrypt(fromString(msg.content, 'base64pad'), decryptedKey, ALGORITHM)
+    return (JSON.parse(new TextDecoder().decode(decrypted)))
 }
 
 /**
