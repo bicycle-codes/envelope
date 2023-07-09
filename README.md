@@ -129,7 +129,7 @@ You could encrypt the document of `msg -> keys`, and not check identity when you
 
 ----------------------------------
 
-The symmetric key for the recipient are in the encrypted message content. The premise is that the recipient will have a [keystore](https://github.com/fission-codes/keystore-idb) instance locally, and will use their local private key to decrypt the symmetric key in the message, then use that symmetric key to decrypt this message content.
+The symmetric key for the recipient is in the encrypted message content. The premise is that the recipient will have a [keystore](https://github.com/fission-codes/keystore-idb) instance locally, and will use their local private key to decrypt the symmetric key in the message, then use that symmetric key to decrypt this message content.
 
 We use a two step decryption like that because we are supporting multi-device use. If someone has a handful of devices, then the symmetric key will be encrypted to each device separately, so there are no shared keys.
 
