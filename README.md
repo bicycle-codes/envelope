@@ -19,7 +19,7 @@ We create a symmetric key and encrypt it to various "exchange" keys. The exchang
 
 That way the documents created by this library can be freely distributed without leaking any keys.
 
-__a send certificate__
+## an envelope
 
 Just a document signed by the recipient, like
 ```js
@@ -32,6 +32,8 @@ Just a document signed by the recipient, like
     author: 'did:key:abc'
 }
 ```
+
+## a message in an envelope
 
 ```js
 // the message
