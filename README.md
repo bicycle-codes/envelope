@@ -121,3 +121,7 @@ export async function wrapMessage (
     message:EncryptedContent
 }, Keys]>
 ```
+
+----------------------
+
+Thanks to @Dominic for sketching this idea.
