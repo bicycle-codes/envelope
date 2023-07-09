@@ -1,12 +1,10 @@
 # envelope ![tests](https://github.com/ssc-hermes/envelope/actions/workflows/nodejs.yml/badge.svg)
 
-Envelopes that have been authorized by the recipient. This hides the sender's identity.
+Envelopes that have been authorized by the recipient. This hides the sender's identity. This is meant to hide the *metadata* of who is talking to whom via private message.
 
 Our server needs to remember the latest sequence number it has seen. This works for a single server situation, but if there are mutliple intermediate nodes, then it would be possible to reuse the certificates by passing the same sequence number to multiple intermediate nodes.
 
 Is that an attack vector? The recipient of the message can verify who wrote the content, so it would not be possible to spoof the content of the message. The recipient can check if the sender is someone they expect.
-
-This is meant to hide the metadata of who is talking to whom via private message.
 
 We want to give out our send certificates *privately*, without revealing them publicly. Although, we (the recipient) are still able to verify the identity of the message sender.
 
