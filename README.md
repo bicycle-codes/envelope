@@ -104,7 +104,9 @@ You could save a map of the message hash to the returned key object. That way yo
 
 You would need to do multi-device sync with the map of msg -> keys though. How do you sync multiple devices without leaking information about who wrote the message?
 
-You could encrypt the document of `msg -> keys`, and not check identity when you serve requests. If an unauthorized person requests the keys for a given username, they would not be able to decrypt them, so the server does not need to know who they are.
+You could encrypt the document of `msg -> keys`, and not check identity when you serve requests. If an unauthorized person requests the keys for a given username, they would not be able to decrypt them, so the server does not need to know who you are.
+
+Though you could make some assumptions about identity, based on who is requesting which messages. It would not be *proof*, just evidence.
 
 ----------------------------------
 
