@@ -99,9 +99,8 @@ We return the sender keys as a seperate object because we *do not* want the send
 
 You could save a map of the message hash to the returned key object. That way you can save the map to some storage, then you can look up the key by the hash of the message object.
 
-**:question:question**
-
 ----------------------------------
+**:question:question**
 
 You would need to do multi-device sync with the map of msg -> keys though. How do you sync multiple devices without leaking information about who wrote the message?
 
