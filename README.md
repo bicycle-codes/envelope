@@ -6,7 +6,7 @@ Our server needs to remember the latest sequence number it has seen. This works 
 
 Is that an attack vector? The recipient of the message can verify who wrote the content, so it would not be possible to spoof the content of the message. The recipient can check if the sender is someone they expect.
 
-This is meant to hide the metadata of who is talking to who via private message.
+This is meant to hide the metadata of who is talking to whom via private message.
 
 We want to give out our send certificates *privately*, without revealing them publicly. Although, we (the recipient) are still able to verify the identity of the message sender.
 
