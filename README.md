@@ -95,23 +95,6 @@ Take an envelope and some content. Encrypt the content, then put it in the envel
 [{ envelope, message: encryptedMessage }, { ...senderKeys }]
 ```
 
-We return the sender keys as a seperate object because we *do not* want the sender's device names to be in the message that gets sent, because that would leak information about who the sender is.
-
-You could save a map of the message hash to the returned key object. That way you can save the map to some storage, then you can look up the key by the hash of the message object.
-
-----------------------------------
-**:question:question**
-
-You would need to do multi-device sync with the map of msg -> keys though. How do you sync multiple devices without leaking information about who wrote the message?
-
-You could encrypt the document of `msg -> keys`, and not check identity when you serve requests. If an unauthorized person requests the keys for a given username, they would not be able to decrypt them, so the server does not need to know who you are.
-
-----------------------------------
-
-The symmetric key for the recipient are in the encrypted message content. The premise is that the recipient will have a [keystore](https://github.com/fission-codes/keystore-idb) instance locally, and will use their local private key to decrypt the symmetric key in the message, then use that symmetric key to decrypt this message content.
-
-We use a two step decryption like that because we are supporting multi-device use. If someone has a handful of devices, then the symmetric key will be encrypted to each device separately, so there are no shared keys.
-
 ```ts
 import { Identity } from '@ssc-hermes/identity'
 import { SignedRequest } from '@ssc-hermes/message'
@@ -132,6 +115,23 @@ export async function wrapMessage (
     message:EncryptedContent
 }, Keys]>
 ```
+
+We return the sender keys as a seperate object because we *do not* want the sender's device names to be in the message that gets sent, because that would leak information about who the sender is.
+
+You could save a map of the message hash to the returned key object. That way you can save the map to some storage, then you can look up the key by the hash of the message object.
+
+----------------------------------
+**:question:question**
+
+You would need to do multi-device sync with the map of msg -> keys though. How do you sync multiple devices without leaking information about who wrote the message?
+
+You could encrypt the document of `msg -> keys`, and not check identity when you serve requests. If an unauthorized person requests the keys for a given username, they would not be able to decrypt them, so the server does not need to know who you are.
+
+----------------------------------
+
+The symmetric key for the recipient are in the encrypted message content. The premise is that the recipient will have a [keystore](https://github.com/fission-codes/keystore-idb) instance locally, and will use their local private key to decrypt the symmetric key in the message, then use that symmetric key to decrypt this message content.
+
+We use a two step decryption like that because we are supporting multi-device use. If someone has a handful of devices, then the symmetric key will be encrypted to each device separately, so there are no shared keys.
 
 ----------------------
 
