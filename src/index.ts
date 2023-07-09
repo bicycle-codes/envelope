@@ -1,13 +1,14 @@
 import { create as createMsg, SignedRequest } from '@ssc-hermes/message'
 import { fromString, toString } from 'uint8arrays'
 import { Crypto } from '@oddjs/odd'
-import { serialize } from 'json-canon'
 import { SymmAlg } from 'keystore-idb/types.js'
 import {
     aesGenKey,
     aesEncrypt
 } from '@oddjs/odd/components/crypto/implementation/browser'
 import { Identity, encryptKey } from '@ssc-hermes/identity'
+import pkg from 'json-canon'
+const { serialize } = pkg
 
 // {
 //     seq: 0,
@@ -25,9 +26,13 @@ export type Envelope = SignedRequest<{
     recipient:string,  // the recipient's username
 }>
 
+// map of device name to encrypted key string
+type Keys = Record<string, string>
+
 type Content = SignedRequest<{
     from:{ username:string },
-    text:string
+    text:string,
+    mentions?:string[],
 }>
 
 interface EncryptedContent {
@@ -36,27 +41,29 @@ interface EncryptedContent {
 }
 
 /**
- * Encrypt a string and put it into an envelope.
- * @param me Your ID.
- * @param recipient The identity of the recipient
+ * Encrypt a string and put it into an envelope. The envelope tells us who the
+ * recipient of the message is; the message sender is hidden.
+ * @param me Your Identity.
+ * @param recipient The identity of the recipient, because we need to encrypt
+ * the message to the recipient.
  * @param envelope The envelope we are putting it in
  * @param content The content that will be encrypted to the recipient
- * @returns [message, sender's keys]
+ * @returns [message, <sender's keys>]
  * Return an array of [message, keys], where keys is a map of the sender's devices
  * to the symmetric key encrypted to that device. This is returned as a seperate
  * object because we *don't* want the sender device names to be in the message.
  */
-export async function wrapMsg (
+export async function wrapMessage (
     me:Identity,
-    recipient:Identity,
+    recipient:Identity,  // because we need to encrypt the message to the recipient
     envelope:Envelope,
     content:Content
 ):Promise<[{
     envelope:Envelope,
     message:EncryptedContent
-}, Record<string, string>]> {
+}, Keys]> {
     // encrypt the content *to* the recipient,
-    // need to use an Identity to get the exchange keys of all the devices
+    // use an Identity to get the exchange keys of all the devices
     //   of the recipient
 
     // create a key
@@ -89,7 +96,7 @@ export async function create (crypto:Crypto.Implementation, {
     seq,
     // expire 1 year from now by default
     expiration = new Date().setFullYear(new Date().getFullYear() + 1)
-}:{ username:string, seq:number, expiration:number }):Promise<Envelope> {
+}:{ username:string, seq:number, expiration?:number }):Promise<Envelope> {
     const envelope = await createMsg(crypto, {
         seq,
         expiration,
@@ -103,13 +110,13 @@ export async function create (crypto:Crypto.Implementation, {
  * Take data in string format, and encrypt it with the given symmetric key.
  * @param key The symmetric key used to encrypt/decrypt
  * @param data The text to encrypt
- * @returns {Promise<{ key:Record<string, string>, content:string }>}
+ * @returns {Promise<{ key:Keys, content:string }>}
  */
 export async function encryptContent (
     key:CryptoKey,
     data:string,
     recipient:Identity
-):Promise<{ key:Record<string, string>, content:string }> {
+):Promise<{ key:Keys, content:string }> {
     const encrypted = arrToString(await aesEncrypt(
         arrFromString(data),
         key,
@@ -131,7 +138,7 @@ export async function encryptContent (
  * @returns {Record<string, string>}
  */
 async function encryptKeys (id:Identity, key:CryptoKey):
-Promise<Record<string, string>> {
+Promise<Keys> {
     const encryptedKeys = {}
     for await (const deviceName of Object.keys(id.devices)) {
         const exchange = id.devices[deviceName].exchange

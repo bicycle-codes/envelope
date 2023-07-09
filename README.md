@@ -6,18 +6,16 @@ Our server needs to remember the latest sequence number it has seen. This works 
 
 Is that an attack vector? The recipient of the message can verify who wrote the content, so it would not be possible to spoof the content of the message. The recipient can check if the sender is someone they expect.
 
-So in this case -- where the same certificate is reused -- the worst case is that the recipient could receive the same message multiple times. You would just ignore duplicate messages in that case.
-
 We want to give out our send certificates *privately*, without revealing them publicly. Although, we are still able to verify the identity of the message sender.
 
-So if we assume we are doing this with internet infrastructure (a server), then in the initial meeting the server would be able to see who we are giving out certificates to because the recipient must be visible. But in subsequent communication, the server would not know who we are talking to, they would just know that we are communicating with someone that we have given a certificate to.
+If we assume we are doing this with internet infrastructure (a server), then in the initial meeting the server would be able to see who we are giving out certificates to because the recipient must be visible. But in subsequent communication, the server would not know who we are talking to, they would just know that we are communicating with someone that we have given a certificate to.
 
 You could also give out the certificates via other means, like on your website, or via signal message, in which case the server would not know who it is from. Meaning, the server cannot even assume that a message is from your 'friend circle' in the application. It can only see that you got a message at a particular time.
 
 ## keystore
 The envelopes and encrypted messages created by this library pair with a [keystore](https://github.com/fission-codes/keystore-idb) instance on your device.
 
-We create a symmetric key and encrypt it to various "exchange" keys. The exchange keys are non-exrtractable key pairs, meaning that the private key can only be used on the device where it was created.
+We create a symmetric key and encrypt it to various "exchange" keys. The exchange keys are non-extractable key pairs that can only be used on the device where they were created.
 
 That way the documents created by this library can be freely distributed without leaking any keys.
 
