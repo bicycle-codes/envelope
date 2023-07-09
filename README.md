@@ -40,7 +40,8 @@ Just a document signed by the recipient, like
 ```js
 // the message
 { envelope, content: 'encrypted text' }
-// sender ID is in the content, so that it is only readable by the recipient
+// sender ID is in the content, so that it is only readable by
+// the recipient
 ```
 
 ## API
