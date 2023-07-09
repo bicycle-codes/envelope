@@ -101,7 +101,11 @@ You could save a map of the message hash to the returned key object. That way yo
 
 **:question:question**
 
+----------------------------------
+
 You would need to do multi-device sync with the map of msg -> keys though. How do you sync multiple devices without leaking information about who wrote the message?
+
+----------------------------------
 
 The keys for the recipient are in the encrypted message content. The premise is that the recipient will have a [keystore](https://github.com/fission-codes/keystore-idb) instance locally, and will use their local private key to decrypt the symmetric key in the message, then use that symmetric key to decrypt this message content.
 
