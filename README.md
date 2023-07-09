@@ -92,10 +92,7 @@ export async function create (crypto:Crypto.Implementation, {
 ```
 
 ### wrapMessage
-Take an envelope and some content. Encrypt the content, then put it in the envelope. This returns an array of
-```js
-[{ envelope, message: encryptedMessage }, { ...senderKeys }]
-```
+Take an envelope and some content. Encrypt the content, then put it in the envelope.
 
 ```ts
 import { Identity } from '@ssc-hermes/identity'
@@ -116,6 +113,11 @@ export async function wrapMessage (
     envelope:Envelope,
     message:EncryptedContent
 }, Keys]>
+```
+
+This returns an array of
+```js
+[{ envelope, message: encryptedMessage }, { ...senderKeys }]
 ```
 
 We return the sender keys as a seperate object because we *do not* want the sender's device names to be in the message that gets sent, because that would leak information about who the sender is.
