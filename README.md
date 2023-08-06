@@ -1,6 +1,6 @@
 # envelope ![tests](https://github.com/ssc-hermes/envelope/actions/workflows/nodejs.yml/badge.svg)
 
-Envelopes that have been authorized by the recipient. This hides the sender's identity, while the recipient is still visible, so this way we can hide the *metadata* of who is talking to whom via private message, but still index message by recipient.
+Envelopes that have been authorized by the recipient. This hides the sender's identity, while the recipient is still visible, so this way we can hide the *metadata* of who is talking to whom via private message, but still index messages by recipient.
 
 Our server needs to remember the latest sequence number it has seen. This works for a single server situation, but if there are mutliple intermediate nodes, then it would be possible to reuse the certificates by passing the same sequence number to multiple intermediate nodes.
 
