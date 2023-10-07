@@ -1,8 +1,8 @@
-# envelope ![tests](https://github.com/ssc-hermes/envelope/actions/workflows/nodejs.yml/badge.svg)
+# envelope ![tests](https://github.com/ssc-half-light/envelope/actions/workflows/nodejs.yml/badge.svg)
 
 Envelopes that have been authorized by the recipient. This hides the sender's identity, while the recipient is still visible. This way we can hide the *metadata* of who is talking to whom via private message, but still index messages by recipient.
 
-This supports multiple devices by default because we are using the [Identity](https://github.com/ssc-hermes/identity) module + a [keystore](https://github.com/fission-codes/keystore-idb) per device.
+This supports multiple devices by default because we are using the [Identity](https://github.com/ssc-half-light/identity) module + a [keystore](https://github.com/fission-codes/keystore-idb) per device.
 
 Our server needs to remember the latest sequence number it has seen. This works for a single server situation, but if there are mutliple intermediate nodes, then it would be possible to reuse the certificates by passing the same sequence number to multiple intermediate nodes.
 
@@ -54,7 +54,7 @@ Just a document signed by the recipient, like
 
 #### Envelope
 ```ts
-import { SignedRequest } from '@ssc-hermes/message'
+import { SignedRequest } from '@ssc-half-light/message'
 
 export type Envelope = SignedRequest<{
     seq:number,
@@ -77,7 +77,7 @@ interface EncryptedContent {
 Create an envelope.
 
 ```ts
-import { SignedRequest } from '@ssc-hermes/message'
+import { SignedRequest } from '@ssc-half-light/message'
 
 export type Envelope = SignedRequest<{
     seq:number,
@@ -97,8 +97,8 @@ export async function create (crypto:Crypto.Implementation, {
 Take an envelope and some content. Encrypt the content, then put it in the envelope.
 
 ```ts
-import { Identity } from '@ssc-hermes/identity'
-import { SignedRequest } from '@ssc-hermes/message'
+import { Identity } from '@ssc-half-light/identity'
+import { SignedRequest } from '@ssc-half-light/message'
 
 export type Envelope = SignedRequest<{
     seq:number,
