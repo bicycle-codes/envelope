@@ -4,6 +4,7 @@ import { createCryptoComponent } from '@ssc-hermes/node-components'
 import { Crypto } from '@oddjs/odd'
 import {
     create as createEnvelope,
+    verify,
     Envelope,
     wrapMessage,
     EncryptedContent,
@@ -20,10 +21,12 @@ test('create an envelope', async t => {
     alice = await createId(alicesCrypto, { humanName: 'alice' })
     alicesEnvelope = await createEnvelope(alicesCrypto, {
         username: alice.username,
-        seq: 0
+        seq: 1
     })
 
+    t.equal(alicesEnvelope.seq, 1, 'should have sequence number 0')
     t.ok(alicesEnvelope.signature, 'should create an envelope')
+    t.equal(alicesEnvelope.expiration, 0, 'should have 0 expiration by defualt')
     t.equal(alicesEnvelope.recipient, alice.username,
         "alice's username should be on the envelope")
 })
@@ -54,6 +57,23 @@ test('put a message in the envelope', async t => {
         'the envelope we get back shoud be equal to what was passed in')
     t.ok(message, 'should return the encrypted content')
     t.ok(keys, 'should return keys')
+})
+
+test('check that the envelope is valid', async t => {
+    const isValid = await verify(alicesEnvelope)
+    t.equal(isValid, true, 'should validate a valid envelope')
+
+    t.equal(await verify(alicesEnvelope, 0), true,
+        'should take a sequence number')
+
+    t.equal(await verify(alicesEnvelope, 1), false,
+        'should say a message is invalid if the sequence number is equal')
+
+    try {
+        t.equal(await verify('baloney'))
+    } catch (err) {
+        t.ok(err, 'should throw given a malformed message')
+    }
 })
 
 test('alice can decrypt a message addressed to alice', async t => {

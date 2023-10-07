@@ -126,7 +126,34 @@ We return the sender keys as a seperate object because we *do not* want the send
 
 You could save a map of the message hash to the returned key object. That way you can save the map to some storage, then you can look up the key by the hash of the message object.
 
+### verify
+Check if a given envelope is valid. `currentSeq` is an optional sequence number to use when checking the validity. If `currentSeq` is less than or equal to `seq` in the `envelope`, then this will reqturn `false`.
+
+```ts
+function verify (envelope:Envelope, currentSeq?:number):Promise<boolean>
+```
+
+```ts
+test('check that the envelope is valid', async t => {
+    const isValid = await verify(alicesEnvelope)
+    t.equal(isValid, true, 'should validate a valid envelope')
+
+    t.equal(await verify(alicesEnvelope, 0), true,
+        'should take a sequence number')
+
+    t.equal(await verify(alicesEnvelope, 1), false,
+        'should say a message is invalid if the sequence number is equal')
+
+    try {
+        t.equal(await verify('baloney'))
+    } catch (err) {
+        t.ok(err, 'should throw given a malformed message')
+    }
+})
+```
+
 ----------------------------------
+
 **:question:question**
 
 You would need to do multi-device sync with the map of msg -> keys though. How do you sync multiple devices without leaking information about who wrote the message?

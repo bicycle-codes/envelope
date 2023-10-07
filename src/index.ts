@@ -1,8 +1,12 @@
-import { create as createMsg, SignedRequest } from '@ssc-half-light/message'
+import {
+    verify as verifyMsg,
+    create as createMsg,
+    SignedRequest
+} from '@ssc-half-light/message'
 import { fromString, toString } from 'uint8arrays'
 import { Crypto } from '@oddjs/odd'
 import { SymmAlg } from 'keystore-idb/types.js'
-import { writeKeyToDid } from '@ssc-hermes/util'
+import { writeKeyToDid } from '@ssc-half-light/util'
 import {
     aesGenKey,
     aesEncrypt,
@@ -110,15 +114,14 @@ export async function decryptMessage (
  * @param {{ username:string, seq:number, expiration?:number }} opts
  *   username: your username (the recipient)
  *   seq: an always incrementing integer
- *   expiration: timestamp to expire, default is 1 year from now
+ *   expiration: timestamp to expire, default is 0, which means no expiration
  * the sequence number to use for this envelope
  * @returns {Promise<Envelope>} A serizlizable certificate
  */
 export async function create (crypto:Crypto.Implementation, {
     username,
     seq,
-    // expire 1 year from now by default
-    expiration = new Date().setFullYear(new Date().getFullYear() + 1)
+    expiration = 0  // no expiration by default
 }:{ username:string, seq:number, expiration?:number }):Promise<Envelope> {
     const envelope = await createMsg(crypto, {
         seq,
@@ -152,6 +155,33 @@ export async function encryptContent (
         key: encryptedKeys,
         content: encrypted
     }
+}
+
+/**
+ * Check if an envelope is valid or not. Checks the signature and expiration,
+ *   and optionally a sequence number.
+ * @param {Envelope} envelope An envelope
+ * @param {number} [currentSeq] The last sequence number [optional]
+ * @returns {Promise<boolean>}
+ */
+export function verify (envelope:Envelope, currentSeq?:number):Promise<boolean> {
+    if (currentSeq !== undefined) {
+        if (envelope.seq <= currentSeq) return Promise.resolve(false)
+    }
+
+    if (isExpired(envelope)) return Promise.resolve(false)
+
+    return verifyMsg(envelope)
+}
+
+/**
+ * Check if this envelope has expired. An expiration of 0 means
+ * it does not expire
+ * @param {Envelope} envelope An envelope
+ * @returns {boolean}
+ */
+export function isExpired (envelope:Envelope):boolean {
+    return (!!envelope.expiration && Date.now() > envelope.expiration)
 }
 
 /**
