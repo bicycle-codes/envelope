@@ -8,7 +8,7 @@ import {
     aesEncrypt,
     aesDecrypt,
 } from '@oddjs/odd/components/crypto/implementation/browser'
-import { Identity, encryptKey, createDeviceName } from '@ssc-hermes/identity'
+import { Identity, encryptKey, createDeviceName } from '@ssc-half-light/identity'
 import serialize from 'json-canon'
 
 // {
