@@ -51,7 +51,7 @@ export interface EncryptedContent {
  * @param content The content that will be encrypted to the recipient
  * @returns [message, <sender's keys>]
  * Return an array of [message, keys], where keys is a map of the sender's devices
- * to the symmetric key encrypted to that device. This is returned as a seperate
+ * to the symmetric key encrypted to that device. This is returned as a separate
  * object because we *don't* want the sender device names to be in the message.
  */
 export async function wrapMessage (

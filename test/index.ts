@@ -28,7 +28,6 @@ test('create an envelope', async t => {
         "alice's username should be on the envelope")
 })
 
-// let alicesKeys:Record<string, string>
 let msgContent:EncryptedContent
 let bob:Identity
 
@@ -42,19 +41,19 @@ test('put a message in the envelope', async t => {
     })
 
     const [
-        { envelope: returnedEnvelope, message },  // the encrypted message content
+        { envelope, message },  // the encrypted message content
         keys  // map of sender's device name to encrypted key string
     ] = await wrapMessage(bob, alice, alicesEnvelope, content)
 
     msgContent = message
 
-    t.ok(returnedEnvelope, 'should return the envelope')
-    t.equal(returnedEnvelope.signature, alicesEnvelope.signature,
+    t.ok(envelope, 'should return the envelope')
+    t.ok(Object.keys(keys).includes(Object.keys(bob.devices)[0]),
+        "should include bob's device name in the keys object")
+    t.equal(envelope.signature, alicesEnvelope.signature,
         'the envelope we get back shoud be equal to what was passed in')
     t.ok(message, 'should return the encrypted content')
     t.ok(keys, 'should return keys')
-
-    // console.log('**msg**', message)
 })
 
 test('alice can decrypt a message addressed to alice', async t => {
