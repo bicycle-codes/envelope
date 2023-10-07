@@ -1,4 +1,4 @@
-import { create as createMsg, SignedRequest } from '@ssc-hermes/message'
+import { create as createMsg, SignedRequest } from '@ssc-half-light/message'
 import { fromString, toString } from 'uint8arrays'
 import { Crypto } from '@oddjs/odd'
 import { SymmAlg } from 'keystore-idb/types.js'

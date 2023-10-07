@@ -1,5 +1,5 @@
 import { test } from '@socketsupply/tapzero'
-import { create as createId, Identity } from '@ssc-hermes/identity'
+import { create as createId, Identity } from '@ssc-half-light/identity'
 import { createCryptoComponent } from '@ssc-hermes/node-components'
 import { Crypto } from '@oddjs/odd'
 import {
@@ -9,7 +9,7 @@ import {
     EncryptedContent,
     decryptMessage
 } from '../dist/index.js'
-import { create as createMsg } from '@ssc-hermes/message'
+import { create as createMsg } from '@ssc-half-light/message'
 
 let alicesEnvelope:Envelope
 let alice:Identity
