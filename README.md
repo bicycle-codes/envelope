@@ -88,8 +88,7 @@ export type Envelope = SignedRequest<{
 export async function create (crypto:Crypto.Implementation, {
     username,
     seq,
-    // expire 1 year from now by default
-    expiration = new Date().setFullYear(new Date().getFullYear() + 1)
+    expiration = 0  // no expiration by default
 }:{ username:string, seq:number, expiration:number }) => Promise<Envelope>
 ```
 
