@@ -7,7 +7,6 @@ import {
     aesGenKey,
     aesEncrypt,
     aesDecrypt,
-    // rsaDecrypt
 } from '@oddjs/odd/components/crypto/implementation/browser'
 import { Identity, encryptKey, createDeviceName } from '@ssc-hermes/identity'
 import serialize from 'json-canon'
@@ -38,7 +37,7 @@ type Content = SignedRequest<{
 }>
 
 export interface EncryptedContent {
-    key:Record<string, string>,  // { deviceName: 'encrypted-key' }
+    key:Record<string, string>,  // { myDeviceName: 'encrypted-key' }
     content:string
 }
 
