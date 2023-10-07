@@ -1,6 +1,6 @@
 {
   "name": "@ssc-half-light/envelope",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Envelopes that have been authorized by the recipient",
   "directories": {
     "test": "test"
