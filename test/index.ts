@@ -84,7 +84,9 @@ test('alice can decrypt a message addressed to alice', async t => {
 })
 
 test("carol cannot read alice's message", async t => {
+    t.plan(1)
     const carolsCrypto = await createCryptoComponent()
+
     try {
         await decryptMessage(carolsCrypto, msgContent)
         t.fail('should throw with the wrong keys')

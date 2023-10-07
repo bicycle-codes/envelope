@@ -123,7 +123,7 @@ This returns an array of
 
 We return the sender keys as a seperate object because we *do not* want the sender's device names to be in the message that gets sent, because that would leak information about who the sender is.
 
-You could save a map of the message hash to the returned key object. That way you can save the map to some storage, then you can look up the key by the hash of the message object.
+The sender could save a map of the message hash to the returned key object. That way they can save the map to some storage, and then look up the key by the hash of the message object.
 
 ### verify
 Check if a given envelope is valid. `currentSeq` is an optional sequence number to use when checking the validity. If `currentSeq` is less than or equal to `seq` in the `envelope`, then this will reqturn `false`.
