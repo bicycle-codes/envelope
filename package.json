@@ -1,5 +1,5 @@
 {
-  "name": "@ssc-hermes/envelope",
+  "name": "@ssc-half-light/envelope",
   "version": "0.0.0",
   "description": "Envelopes that have been authorized by the recipient",
   "directories": {
