@@ -60,6 +60,7 @@ test('put a message in the envelope', async t => {
 })
 
 test('check that the envelope is valid', async t => {
+    t.plan(4)
     const isValid = await verify(alicesEnvelope)
     t.equal(isValid, true, 'should validate a valid envelope')
 
@@ -70,7 +71,7 @@ test('check that the envelope is valid', async t => {
         'should say a message is invalid if the sequence number is equal')
 
     try {
-        t.equal(await verify('baloney'))
+        await verify('baloney')
     } catch (err) {
         t.ok(err, 'should throw given a malformed message')
     }
