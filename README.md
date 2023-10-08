@@ -58,7 +58,7 @@ import { SignedRequest } from '@ssc-half-light/message'
 
 export type Envelope = SignedRequest<{
     seq:number,
-    expiration?:number,  // default to 1 year from now
+    expiration?:number,  // default to 0, which means no expiration
     recipient:string,  // the recipient's username
 }>
 ```

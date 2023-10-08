@@ -41,6 +41,7 @@ type Content = SignedRequest<{
 }>
 
 export interface EncryptedContent {
+    // The key, encrypted to the recipient
     key:Record<string, string>,  // { myDeviceName: 'encrypted-key' }
     content:string
 }
