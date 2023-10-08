@@ -76,8 +76,11 @@ export async function wrapMessage (
     const key = await aesGenKey(ALGORITHM)
     // encrypt the key to the recipient,
     // also encrypt the content with the key
-    const encryptedContent = await encryptContent(key, serialize(content),
-        recipient)
+    const encryptedContent = await encryptContent(
+        key,
+        serialize(content),
+        recipient
+    )
 
     return [
         {
