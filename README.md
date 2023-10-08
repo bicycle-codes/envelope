@@ -99,6 +99,12 @@ Take an envelope and some content. Encrypt the content, then put it in the envel
 import { Identity } from '@ssc-half-light/identity'
 import { SignedRequest } from '@ssc-half-light/message'
 
+type Content = SignedRequest<{
+    from:{ username:string },
+    text:string,
+    mentions?:string[],
+}>
+
 export type Envelope = SignedRequest<{
     seq:number,
     expiration:number,
@@ -123,7 +129,7 @@ This returns an array of
 
 We return the sender keys as a seperate object because we *do not* want the sender's device names to be in the message that gets sent, because that would leak information about who the sender is.
 
-The sender could save a map of the message hash to the returned key object. That way they can save the map to some storage, and then look up the key by the hash of the message object.
+The sender could save a map of the message's hash to the returned key object. That way they can save the map to some storage, and then look up the key by the hash of the message object.
 
 ### verify
 Check if a given envelope is valid. `currentSeq` is an optional sequence number to use when checking the validity. If `currentSeq` is less than or equal to `seq` in the `envelope`, then this will reqturn `false`.
