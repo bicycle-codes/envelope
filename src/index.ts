@@ -119,7 +119,6 @@ export async function decryptMessage (
  *   username: your username (the recipient)
  *   seq: an always incrementing integer
  *   expiration: timestamp to expire, default is 0, which means no expiration
- * the sequence number to use for this envelope
  * @returns {Promise<Envelope>} A serizlizable certificate
  */
 export async function create (crypto:Crypto.Implementation, {

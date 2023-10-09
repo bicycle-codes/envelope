@@ -21,7 +21,7 @@
   "dependencies": {
     "@oddjs/odd": "^0.37.2",
     "@ssc-half-light/identity": "^0.0.9",
-    "@ssc-half-light/message": "^0.4.7",
+    "@ssc-half-light/message": "^0.5.8",
     "@ssc-half-light/util": "^0.10.2",
     "json-canon": "^1.0.1",
     "keystore-idb": "^0.15.5",
