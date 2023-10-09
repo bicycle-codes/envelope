@@ -4,10 +4,6 @@ Envelopes that have been authorized by the recipient. This hides the sender's id
 
 This supports multiple devices by default because we are using the [Identity](https://github.com/ssc-half-light/identity) module + a [keystore](https://github.com/fission-codes/keystore-idb) per device.
 
-Our server needs to remember the latest sequence number it has seen. This works for a single server situation, but if there are mutliple intermediate nodes, then it would be possible to reuse the certificates by passing the same sequence number to multiple intermediate nodes.
-
-Is that an attack vector? The recipient of the message can verify who wrote the content, so it would not be possible to spoof the content of the message. The recipient can check if the sender is someone they expect.
-
 We want to give out our send certificates *privately*, without revealing them publicly. Although, we (the recipient) are still able to verify the identity of the message sender.
 
 If we assume we are doing this with internet infrastructure (a server), then in the initial meeting the server would be able to see who we are giving out certificates to because the recipient must be visible. But in subsequent communication, the server would not know who we are talking to, they would just know that we are communicating with someone that we have given a certificate to.
