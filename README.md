@@ -132,7 +132,7 @@ We return the sender keys as a seperate object because we *do not* want the send
 The sender could save a map of the message's hash to the returned key object. That way they can save the map to some storage, and then look up the key by the hash of the message object.
 
 ### verify
-Check if a given envelope is valid. `currentSeq` is an optional sequence number to use when checking the validity. If `currentSeq` is less than or equal to `seq` in the `envelope`, then this will reqturn `false`.
+Check if a given envelope is valid. `currentSeq` is an optional sequence number to use when checking the validity. If `currentSeq` is less than or equal to `seq` in the `envelope`, then this will return `false`.
 
 ```ts
 function verify (envelope:Envelope, currentSeq?:number):Promise<boolean>
