@@ -132,6 +132,7 @@ This returns an array of
 ```
 
 __note__
+
 __We return the sender keys as a seperate object__ because we *do not* want the sender's device names to be in the message that gets sent, because that would leak information about who the sender is.
 
 The sender could save a map of the message's hash to the returned key object. That way they can save the map to some storage, and then look up the key by the hash of the message object.
@@ -139,7 +140,7 @@ The sender could save a map of the message's hash to the returned key object. Th
 ------------------------------------------------------
 ### decryptMessage
 ------------------------------------------------------
-Decrypt a given message. Depends on having the right `crypto` object. Return a `Content` object --
+Decrypt a given message. Depends on having the right `crypto` object. Return a `Content` object:
 ```ts
 type Content = SignedRequest<{
     from:{ username:string },
