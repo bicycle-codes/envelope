@@ -71,6 +71,7 @@ test('check that the envelope is valid', async t => {
         'should say a message is invalid if the sequence number is equal')
 
     try {
+        // @ts-ignore
         await verify('baloney')
     } catch (err) {
         t.ok(err, 'should throw given a malformed message')

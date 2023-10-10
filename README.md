@@ -22,8 +22,8 @@ We create a symmetric key and encrypt it to various "exchange" keys. The exchang
 That way the documents created by this library can be freely distributed without leaking any keys.
 
 ## an envelope
-
 Just a document signed by the recipient, like
+
 ```js
 // envelope
 {
@@ -46,7 +46,9 @@ Just a document signed by the recipient, like
 
 ## API
 
+------------------------------------------------------
 ### types
+------------------------------------------------------
 
 #### Envelope
 ```ts
@@ -69,7 +71,9 @@ interface EncryptedContent {
 }
 ```
 
+------------------------------------------------------
 ### create
+------------------------------------------------------
 Create an envelope.
 
 ```ts
@@ -88,8 +92,12 @@ export async function create (crypto:Crypto.Implementation, {
 }:{ username:string, seq:number, expiration:number }) => Promise<Envelope>
 ```
 
+------------------------------------------------------
 ### wrapMessage
-Take an envelope and some content. Encrypt the content, then put it in the envelope.
+------------------------------------------------------
+Create a new AES key, take an envelope and some content. Encrypt the content, then put the content in the envelope.
+
+This will encrypt the AES key to every device in the recipient identity, as well as your identity.
 
 ```ts
 import { Identity } from '@ssc-half-light/identity'
@@ -123,11 +131,50 @@ This returns an array of
 [{ envelope, message: encryptedMessage }, { ...senderKeys }]
 ```
 
-We return the sender keys as a seperate object because we *do not* want the sender's device names to be in the message that gets sent, because that would leak information about who the sender is.
+__note__
+__We return the sender keys as a seperate object__ because we *do not* want the sender's device names to be in the message that gets sent, because that would leak information about who the sender is.
 
 The sender could save a map of the message's hash to the returned key object. That way they can save the map to some storage, and then look up the key by the hash of the message object.
 
+------------------------------------------------------
+### decryptMessage
+------------------------------------------------------
+Decrypt a given message. Depends on having the right `crypto` object. Return a `Content` object --
+```ts
+type Content = SignedRequest<{
+    from:{ username:string },
+    text:string,
+    mentions?:string[],
+}>
+```
+
+```ts
+export async function decryptMessage (
+    crypto:Crypto.Implementation,
+    msg:EncryptedContent
+):Promise<Content>
+```
+
+#### example
+```ts
+type Content = SignedRequest<{
+    from:{ username:string },
+    text:string,
+    mentions?:string[],
+}>
+
+import { decryptMessage } from '@ssc-half-light/envelope'
+
+const decrypted = await decryptMessage(alicesCrypto, msgContent)
+
+t.equal(decrypted.from.username, bob.username,
+    "should have bob's username in decrypted message")
+t.equal(decrypted.text, 'hello', 'should have the original text of the message')
+```
+
+------------------------------------------------------
 ### verify
+------------------------------------------------------
 Check if a given envelope is valid. `currentSeq` is an optional sequence number to use when checking the validity. If `currentSeq` is less than or equal to `seq` in the `envelope`, then this will return `false`.
 
 ```ts
