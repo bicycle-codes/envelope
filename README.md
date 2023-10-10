@@ -146,9 +146,7 @@ type Content = SignedRequest<{
     text:string,
     mentions?:string[],
 }>
-```
 
-```ts
 export async function decryptMessage (
     crypto:Crypto.Implementation,
     msg:EncryptedContent
