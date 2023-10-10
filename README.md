@@ -155,19 +155,20 @@ export async function decryptMessage (
 
 #### example
 ```ts
+import { decryptMessage } from '@ssc-half-light/envelope'
+
 type Content = SignedRequest<{
     from:{ username:string },
     text:string,
     mentions?:string[],
 }>
 
-import { decryptMessage } from '@ssc-half-light/envelope'
-
 const decrypted = await decryptMessage(alicesCrypto, msgContent)
 
-t.equal(decrypted.from.username, bob.username,
-    "should have bob's username in decrypted message")
-t.equal(decrypted.text, 'hello', 'should have the original text of the message')
+console.log(decrypted.from.username)
+// => 'bob'
+console.log(decrypted.text)
+// => 'hello'
 ```
 
 ------------------------------------------------------
