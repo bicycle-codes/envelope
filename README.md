@@ -97,7 +97,7 @@ export async function create (crypto:Crypto.Implementation, {
 ------------------------------------------------------
 Create a new AES key, take an envelope and some content. Encrypt the content, then put the content in the envelope.
 
-This will encrypt the AES key to every device in the recipient identity, as well as your identity.
+This will encrypt the AES key to every device in the recipient identity, as well as your own identity.
 
 ```ts
 import { Identity } from '@ssc-half-light/identity'
