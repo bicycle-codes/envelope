@@ -166,9 +166,9 @@ type Content = SignedRequest<{
 const decrypted = await decryptMessage(alicesCrypto, msgContent)
 
 console.log(decrypted.from.username)
-// => 'bob'
+// => bob
 console.log(decrypted.text)
-// => 'hello'
+// => hello
 ```
 
 ------------------------------------------------------
