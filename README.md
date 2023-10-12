@@ -165,6 +165,22 @@ console.log(decrypted.text)
 // => hello
 ```
 
+Pass in the keys as a separate argument if you are the message author,
+because we need to keep your device names out of the unenvrypted envelope.
+
+```js
+import { decryptMessage } from '@ssc-half-light/envelope'
+
+// bobs keys were not in the envelope, because doing so would
+// reveal information about the message author, Bob.
+const decrypted = await decryptMessage(bobsCrypto, msgContent, bobsKeys)
+
+console.log(decrypted.from.username)
+// => bob
+console.log(decrypted.text)
+// => hello
+```
+
 ------------------------------------------------------
 ### verify
 ------------------------------------------------------
