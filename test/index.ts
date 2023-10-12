@@ -8,7 +8,8 @@ import {
     Envelope,
     wrapMessage,
     EncryptedContent,
-    decryptMessage
+    decryptMessage,
+    Keys
 } from '../dist/index.js'
 import { create as createMsg } from '@ssc-half-light/message'
 
@@ -34,8 +35,10 @@ test('create an envelope', async t => {
 let msgContent:EncryptedContent
 let bob:Identity
 
+let bobsCrypto:Crypto.Implementation
+let bobsKeys:Keys
 test('put a message in the envelope', async t => {
-    const bobsCrypto = await createCryptoComponent()
+    bobsCrypto = await createCryptoComponent()
     bob = await createId(bobsCrypto, { humanName: 'bob' })
 
     const content = await createMsg(bobsCrypto, {
@@ -47,6 +50,8 @@ test('put a message in the envelope', async t => {
         { envelope, message },  // the encrypted message content
         keys  // map of sender's device name to encrypted key string
     ] = await wrapMessage(bob, alice, alicesEnvelope, content)
+
+    bobsKeys = keys
 
     msgContent = message
 
@@ -83,6 +88,14 @@ test('alice can decrypt a message addressed to alice', async t => {
     t.equal(decrypted.from.username, bob.username,
         "should have bob's username in decrypted message")
     t.equal(decrypted.text, 'hello', 'should have the original text of the message')
+})
+
+test('bob can decrypt a message that he created', async t => {
+    const decrypted = await decryptMessage(bobsCrypto, msgContent, bobsKeys)
+    t.ok(decrypted, 'should decrypt without error')
+    t.equal(decrypted.from.username, bob.username,
+        'can read the decrypted text')
+    t.equal(decrypted.text, 'hello', 'can read decrypted text')
 })
 
 test("carol cannot read alice's message", async t => {

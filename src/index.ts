@@ -12,7 +12,11 @@ import {
     aesEncrypt,
     aesDecrypt,
 } from '@oddjs/odd/components/crypto/implementation/browser'
-import { Identity, encryptKey, createDeviceName } from '@ssc-half-light/identity'
+import {
+    Identity,
+    encryptKey,
+    createDeviceName
+} from '@ssc-half-light/identity'
 import serialize from 'json-canon'
 
 // {
@@ -32,7 +36,7 @@ export type Envelope = SignedRequest<{
 }>
 
 // map of device name to encrypted key string
-type Keys = Record<string, string>
+export type Keys = Record<string, string>
 
 type Content = SignedRequest<{
     from:{ username:string },
@@ -92,13 +96,30 @@ export async function wrapMessage (
 
 export async function decryptMessage (
     crypto:Crypto.Implementation,
-    msg:EncryptedContent
+    msg:EncryptedContent,
+    keys?:Record<string, string>
 ):Promise<Content> {
+    if (keys) {
+        const did = await writeKeyToDid(crypto)
+        const deviceName = await createDeviceName(did)
+        const encryptedKey = keys[deviceName]
+
+        const decryptedKey = await crypto.keystore.decrypt(
+            fromString(encryptedKey, 'base64pad')
+        )
+
+        const decryptedMsg = await aesDecrypt(
+            fromString(msg.content, 'base64pad'),
+            decryptedKey,
+            ALGORITHM
+        )
+
+        return (JSON.parse(new TextDecoder().decode(decryptedMsg)))
+    }
+
     const did = await writeKeyToDid(crypto)
     const deviceName = await createDeviceName(did)
-
     const encryptedKey = msg.key[deviceName]
-
     const decryptedKey = await crypto.keystore.decrypt(
         fromString(encryptedKey, 'base64pad')
     )
