@@ -157,12 +157,6 @@ export async function decryptMessage (
 ```ts
 import { decryptMessage } from '@ssc-half-light/envelope'
 
-type Content = SignedRequest<{
-    from:{ username:string },
-    text:string,
-    mentions?:string[],
-}>
-
 const decrypted = await decryptMessage(alicesCrypto, msgContent)
 
 console.log(decrypted.from.username)
