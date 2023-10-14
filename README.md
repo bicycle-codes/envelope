@@ -1,6 +1,6 @@
 # envelope ![tests](https://github.com/ssc-half-light/envelope/actions/workflows/nodejs.yml/badge.svg)
 
-Envelopes that have been authorized by the recipient. This hides the sender's identity, while the recipient is still visible, this hiding the *metadata* of who is talking to whom via private message. Because the recipient is legible, we can still index messages by recipient.
+Envelopes that have been authorized by the recipient. This hides the sender's identity, while the recipient is still visible, thus hiding the *metadata* of who is talking to whom via private message. Because the recipient is legible, we can still index messages by recipient.
 
 This supports multiple devices by default because we are using the [Identity](https://github.com/ssc-half-light/identity) module + a [keystore](https://github.com/fission-codes/keystore-idb) per device.
 
