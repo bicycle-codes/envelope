@@ -14,6 +14,9 @@ This is assuming that all the users of the app are well behaved, and not giving 
 
 **⚠️ possible attack vector** -- what if there is an adversarial user of the app? Could keep it by invitation only.
 
+## metaphors
+If we stick with comparisons to common physical activities, this is pretty much exactly equivalent to the postal service. The envelope shows the recipient, and it needs a stamp (the signature here), but it hides the sender's ID.
+
 ## keystore
 The envelopes and encrypted messages pair with a [keystore](https://github.com/fission-codes/keystore-idb) instance on your device.
 
