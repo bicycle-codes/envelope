@@ -1,6 +1,6 @@
 {
   "name": "@ssc-half-light/envelope",
-  "version": "0.1.13",
+  "version": "0.1.14",
   "description": "Envelopes that have been authorized by the recipient",
   "directories": {
     "test": "test"
@@ -64,5 +64,5 @@
   },
   "homepage": "https://github.com/ssc-half-light/envelope#readme",
   "author": "nichoth <nichoth@gmail.com> (https://nichoth.com)",
-  "license" : "SEE LICENSE IN LICENSE"
+  "license": "SEE LICENSE IN LICENSE"
 }
