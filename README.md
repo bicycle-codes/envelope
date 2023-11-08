@@ -51,7 +51,6 @@ Just a document signed by the recipient, like
 
 ------------------------------------------------------
 ### types
-------------------------------------------------------
 
 #### Envelope
 ```ts
@@ -74,7 +73,6 @@ interface EncryptedContent {
 }
 ```
 
-------------------------------------------------------
 ### create
 ------------------------------------------------------
 Create an envelope.
@@ -95,7 +93,6 @@ export async function create (crypto:Crypto.Implementation, {
 }:{ username:string, seq:number, expiration:number }) => Promise<Envelope>
 ```
 
-------------------------------------------------------
 ### wrapMessage
 ------------------------------------------------------
 Create a new AES key, take an envelope and some content. Encrypt the content, then put the content in the envelope.
@@ -139,7 +136,6 @@ This returns an array of
 
 The sender could save a map of the message's hash to the returned key object. That way they can save the map to some storage, and then look up the key by the hash of the message object.
 
-------------------------------------------------------
 ### decryptMessage
 ------------------------------------------------------
 Decrypt a given message. Depends on having the right `crypto` object. Return a `Content` object:
@@ -184,7 +180,6 @@ console.log(decrypted.text)
 // => hello
 ```
 
-------------------------------------------------------
 ### verify
 ------------------------------------------------------
 Check if a given envelope is valid. `currentSeq` is an optional sequence number to use when checking the validity. If `currentSeq` is less than or equal to `seq` in the `envelope`, then this will return `false`.
