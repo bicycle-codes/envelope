@@ -47,12 +47,9 @@ Just a document signed by the recipient, like
 // the recipient
 ```
 
-## API
+## types
 
-------------------------------------------------------
-### types
-
-#### Envelope
+### Envelope
 ```ts
 import { SignedRequest } from '@ssc-half-light/message'
 
@@ -63,7 +60,7 @@ export type Envelope = SignedRequest<{
 }>
 ```
 
-#### EncryptedContent
+### EncryptedContent
 When you encrypt a string, we create a record of keys. The `key` object is a map from device name to a symmetric key that has been encrypted to the device. We do it this way because each device has its own keypair. We use the symmetric key to encrypt the content.
 
 ```ts
@@ -73,8 +70,9 @@ interface EncryptedContent {
 }
 ```
 
+## API
+
 ### create
-------------------------------------------------------
 Create an envelope.
 
 ```ts
@@ -94,7 +92,6 @@ export async function create (crypto:Crypto.Implementation, {
 ```
 
 ### wrapMessage
-------------------------------------------------------
 Create a new AES key, take an envelope and some content. Encrypt the content, then put the content in the envelope.
 
 This will encrypt the AES key to every device in the recipient identity, as well as your own identity.
@@ -137,7 +134,6 @@ This returns an array of
 The sender could save a map of the message's hash to the returned key object. That way they can save the map to some storage, and then look up the key by the hash of the message object.
 
 ### decryptMessage
-------------------------------------------------------
 Decrypt a given message. Depends on having the right `crypto` object. Return a `Content` object:
 ```ts
 type Content = SignedRequest<{
@@ -181,7 +177,6 @@ console.log(decrypted.text)
 ```
 
 ### verify
-------------------------------------------------------
 Check if a given envelope is valid. `currentSeq` is an optional sequence number to use when checking the validity. If `currentSeq` is less than or equal to `seq` in the `envelope`, then this will return `false`.
 
 ```ts
