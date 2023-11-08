@@ -94,6 +94,14 @@ export async function wrapMessage (
         await encryptKeys(me, key)]
 }
 
+/**
+ * Pass in keys if you are the message author, and thus your keys would not
+ * be in the message. If you are the recipient, then your key is in the message.
+ * @param {Crypto.Implementation} crypto `odd` crypto instance
+ * @param {EncryptedContent} msg
+ * @param {Record<string, string>} [keys] The message author's keys
+ * @returns {Promise<Content>}
+ */
 export async function decryptMessage (
     crypto:Crypto.Implementation,
     msg:EncryptedContent,
