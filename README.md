@@ -1,4 +1,8 @@
-# envelope ![tests](https://github.com/ssc-half-light/envelope/actions/workflows/nodejs.yml/badge.svg)
+# envelope 
+![tests](https://github.com/ssc-half-light/envelope/actions/workflows/nodejs.yml/badge.svg)
+[![module](https://img.shields.io/badge/module-ESM-blue)](README.md)
+[![types](https://img.shields.io/npm/types/@ssc-half-light/envelope)](README.md)
+[![license](https://img.shields.io/badge/license-PolyForm%20Shield-8A2BE2)](LICENSE)
 
 Envelopes that have been authorized by the recipient. This hides the sender's identity, while the recipient is still visible, thus hiding the *metadata* of who is talking to whom via private message. Because the recipient is legible, we can still index messages by recipient.
 
