@@ -164,8 +164,10 @@ console.log(decrypted.text)
 // => hello
 ```
 
-Pass in the keys as a separate argument if you are the message author,
-because we need to keep your device names out of the unencrypted envelope.
+#### Decrypt a message that I wrote
+Pass in the keys as a separate argument if you are the message author. The
+sender's keys are not in the message evnelope, because we need to keep your
+device names out of the unencrypted envelope.
 
 ```js
 import { decryptMessage } from '@ssc-half-light/envelope'
