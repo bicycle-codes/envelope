@@ -1,4 +1,4 @@
-# envelope 
+# envelope
 ![tests](https://github.com/ssc-half-light/envelope/actions/workflows/nodejs.yml/badge.svg)
 [![Socket Badge](https://socket.dev/api/badge/npm/package/@ssc-half-light/envelope)](https://socket.dev/npm/package/@ssc-half-light/envelope)
 [![module](https://img.shields.io/badge/module-ESM-blue)](README.md)
