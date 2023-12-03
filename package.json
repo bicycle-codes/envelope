@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "@oddjs/odd": "^0.37.2",
-    "@ssc-half-light/identity": "^0.1.13",
+    "@ssc-half-light/identity": "^0.1.15",
     "@ssc-half-light/message": "^0.5.8",
     "@ssc-half-light/util": "^0.10.2",
     "json-canon": "^1.0.1",
