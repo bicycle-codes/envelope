@@ -30,7 +30,7 @@
   },
   "devDependencies": {
     "@nichoth/tapzero": "^0.8.4",
-    "@ssc-half-light/node-components": "^0.1.20",
+    "@ssc-half-light/node-components": "^0.1.22",
     "@typescript-eslint/parser": "^5.55.0",
     "auto-changelog": "^2.4.0",
     "esbuild": "^0.20.0",
