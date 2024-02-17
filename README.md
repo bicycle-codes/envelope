@@ -1,13 +1,13 @@
 # envelope
-![tests](https://github.com/ssc-half-light/envelope/actions/workflows/nodejs.yml/badge.svg)
-[![Socket Badge](https://socket.dev/api/badge/npm/package/@ssc-half-light/envelope)](https://socket.dev/npm/package/@ssc-half-light/envelope)
+![tests](https://github.com/bicycle-codes/envelope/actions/workflows/nodejs.yml/badge.svg)
+[![Socket Badge](https://socket.dev/api/badge/npm/package/@bicycle-codes/envelope)](https://socket.dev/npm/package/@bicycle-codes/envelope)
 [![module](https://img.shields.io/badge/module-ESM-blue?style=flat-square)](README.md)
-[![types](https://img.shields.io/npm/types/@ssc-half-light/envelope?style=flat-square)](README.md)
+[![types](https://img.shields.io/npm/types/@bicycle-codes/envelope?style=flat-square)](README.md)
 [![license](https://nichoth.github.io/badge/license-polyform-shield.svg)](LICENSE)
 
 Envelopes that have been authorized by the recipient. This hides the sender's identity, while the recipient is still visible, thus hiding the *metadata* of who is talking to whom via private message. Because the recipient is legible, we can still index messages by recipient.
 
-This supports multiple devices by default because we are using the [Identity](https://github.com/ssc-half-light/identity) module + a [keystore](https://github.com/fission-codes/keystore-idb) per device.
+This supports multiple devices by default because we are using the [Identity](https://github.com/bicycle-codes/identity) module + a [keystore](https://github.com/fission-codes/keystore-idb) per device.
 
 We want to give out our send certificates *privately*, without revealing them publicly. Although, we (the recipient) are still able to verify the identity of the message sender.
 
@@ -56,7 +56,7 @@ Just a document signed by the recipient, like
 
 ### Envelope
 ```ts
-import { SignedRequest } from '@ssc-half-light/message'
+import { SignedRequest } from '@bicycle-codes/message'
 
 export type Envelope = SignedRequest<{
     seq:number,
@@ -81,7 +81,7 @@ interface EncryptedContent {
 Create an envelope.
 
 ```ts
-import { SignedRequest } from '@ssc-half-light/message'
+import { SignedRequest } from '@ssc-bicycle-codes/message'
 
 export type Envelope = SignedRequest<{
     seq:number,
@@ -102,8 +102,8 @@ Create a new AES key, take an envelope and some content. Encrypt the content, th
 This will encrypt the AES key to every device in the recipient identity, as well as your own identity.
 
 ```ts
-import { Identity } from '@ssc-half-light/identity'
-import { SignedRequest } from '@ssc-half-light/message'
+import { Identity } from '@bicycle-codes/identity'
+import { SignedRequest } from '@ssc-bicycle-codes/message'
 
 type Content = SignedRequest<{
     from:{ username:string },
@@ -155,7 +155,7 @@ export async function decryptMessage (
 
 #### example
 ```ts
-import { decryptMessage } from '@ssc-half-light/envelope'
+import { decryptMessage } from '@bicycle-codes/envelope'
 
 const decrypted = await decryptMessage(alicesCrypto, msgContent)
 
@@ -171,7 +171,7 @@ sender's keys are not in the message evnelope, because we need to keep your
 device names out of the unencrypted envelope.
 
 ```js
-import { decryptMessage } from '@ssc-half-light/envelope'
+import { decryptMessage } from '@bicycle-codes/envelope'
 
 // bobs keys were not in the envelope, because doing so would
 // reveal information about the message author, Bob.

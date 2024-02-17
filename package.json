@@ -15,13 +15,13 @@
     "build": "mkdir -p ./dist && rm -rf ./dist/* && npm run build-cjs && tsc --project tsconfig.build.json",
     "preinstall": "export $(cat .env | xargs)",
     "preversion": "npm run lint",
-    "postversion": "git push && git push --tags && export $(cat .env | xargs) && npm publish && npm publish --@ssc-half-light:registry=https://registry.npmjs.org --access=public",
+    "postversion": "git push && git push --tags && export $(cat .env | xargs) && npm publish",
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
     "@oddjs/odd": "^0.37.2",
-    "@ssc-half-light/identity": "^0.1.15",
-    "@ssc-half-light/message": "^0.5.8",
+    "@bicycle-codes/identity": "^0.2.8",
+    "@bicycle-codes/message": "^0.6.1",
     "@ssc-half-light/util": "^0.10.2",
     "json-canon": "^1.0.1",
     "keystore-idb": "^0.15.5",
@@ -31,10 +31,10 @@
     "@nichoth/tapzero": "^0.8.4",
     "@ssc-hermes/node-components": "^0.1.12",
     "@typescript-eslint/parser": "^5.55.0",
-    "esbuild": "^0.19.8",
+    "esbuild": "^0.20.0",
     "standardx": "^7.0.0",
     "tap-arc": "^1.2.2",
-    "typescript": "^5.0.2"
+    "typescript": "^5.3.3"
   },
   "exports": {
     ".": {
@@ -54,15 +54,18 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ssc-half-light/envelope.git"
+    "url": "git+https://github.com/bicycle-codes/envelope.git"
   },
   "keywords": [
-    "envelope"
+    "envelope",
+    "cryptography",
+    "encrypt",
+    "browser"
   ],
   "bugs": {
-    "url": "https://github.com/ssc-half-light/envelope/issues"
+    "url": "https://github.com/bicycle-codes/envelope/issues"
   },
-  "homepage": "https://github.com/ssc-half-light/envelope#readme",
-  "author": "nichoth <nichoth@gmail.com> (https://nichoth.com)",
+  "homepage": "https://github.com/bicycle-codes/envelope#readme",
+  "author": "nichoth <nichoth@nichoth.com> (https://nichoth.com)",
   "license": "SEE LICENSE IN LICENSE"
 }
