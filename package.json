@@ -15,22 +15,24 @@
     "build": "mkdir -p ./dist && rm -rf ./dist/* && npm run build-cjs && tsc --project tsconfig.build.json",
     "preinstall": "export $(cat .env | xargs)",
     "preversion": "npm run lint",
-    "postversion": "git push && git push --tags && export $(cat .env | xargs) && npm publish",
+    "version": "auto-changelog -p --template keepachangelog --breaking-pattern 'BREAKING CHANGE:' && git add CHANGELOG.md",
+    "postversion": "git push && git push --tags && npm publish",
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
     "@oddjs/odd": "^0.37.2",
     "@bicycle-codes/identity": "^0.2.8",
     "@bicycle-codes/message": "^0.6.1",
-    "@ssc-half-light/util": "^0.10.2",
+    "@ssc-half-light/util": "^0.11.4",
     "json-canon": "^1.0.1",
     "keystore-idb": "^0.15.5",
     "uint8arrays": "^4.0.4"
   },
   "devDependencies": {
     "@nichoth/tapzero": "^0.8.4",
-    "@ssc-hermes/node-components": "^0.1.12",
+    "@ssc-half-light/node-components": "^0.1.20",
     "@typescript-eslint/parser": "^5.55.0",
+    "auto-changelog": "^2.4.0",
     "esbuild": "^0.20.0",
     "standardx": "^7.0.0",
     "tap-arc": "^1.2.2",

@@ -1,6 +1,6 @@
 import { test } from '@nichoth/tapzero'
-import { create as createId, Identity } from '@ssc-half-light/identity'
-import { createCryptoComponent } from '@ssc-hermes/node-components'
+import { create as createId, Identity } from '@bicycle-codes/identity'
+import { createCryptoComponent } from '@ssc-half-light/node-components'
 import { Crypto } from '@oddjs/odd'
 import {
     create as createEnvelope,
@@ -11,7 +11,7 @@ import {
     decryptMessage,
     Keys
 } from '../dist/index.js'
-import { create as createMsg } from '@ssc-half-light/message'
+import { create as createMsg } from '@bicycle-codes/message'
 
 let alicesEnvelope:Envelope
 let alice:Identity

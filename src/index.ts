@@ -1,8 +1,8 @@
 import {
     verify as verifyMsg,
     create as createMsg,
-    SignedRequest
-} from '@ssc-half-light/message'
+} from '@bicycle-codes/message'
+import type { SignedMessage } from '@bicycle-codes/message'
 import { fromString, toString } from 'uint8arrays'
 import { Crypto } from '@oddjs/odd'
 import { SymmAlg } from 'keystore-idb/types.js'
@@ -16,7 +16,7 @@ import {
     Identity,
     encryptKey,
     createDeviceName
-} from '@ssc-half-light/identity'
+} from '@bicycle-codes/identity'
 import serialize from 'json-canon'
 
 // {
@@ -29,7 +29,7 @@ import serialize from 'json-canon'
 
 export const ALGORITHM = SymmAlg.AES_GCM
 
-export type Envelope = SignedRequest<{
+export type Envelope = SignedMessage<{
     seq:number,
     expiration:number,
     recipient:string,  // the recipient's username
@@ -38,7 +38,7 @@ export type Envelope = SignedRequest<{
 // map of device name to encrypted key string
 export type Keys = Record<string, string>
 
-type Content = SignedRequest<{
+type Content = SignedMessage<{
     from:{ username:string },
     text:string,
     mentions?:string[],
