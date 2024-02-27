@@ -1,6 +1,6 @@
 {
   "name": "@bicycle-codes/envelope",
-  "version": "0.1.21",
+  "version": "0.1.22",
   "description": "Envelopes that have been authorized by the recipient",
   "directories": {
     "test": "test"
