@@ -8,7 +8,7 @@
   "type": "module",
   "main": "dist/index.js",
   "scripts": {
-    "lint": "standardx -v \"./**/*.ts\"",
+    "lint": "eslint \"./**/*.{ts,js}\"",
     "build-tests": "esbuild test/*.ts --platform=node --format=esm --outdir=test --keep-names",
     "test": "npm run build && npm run build-tests && NODE_ENV=test node ./test/index.js | tap-arc",
     "build-cjs": "esbuild src/*.ts --format=cjs --keep-names --outdir=./dist --out-extension:.js=.cjs",
@@ -31,10 +31,12 @@
   "devDependencies": {
     "@nichoth/tapzero": "^0.8.4",
     "@ssc-half-light/node-components": "^0.1.22",
-    "@typescript-eslint/parser": "^5.55.0",
+    "@typescript-eslint/parser": "^7.1.0",
+    "@typescript-eslint/eslint-plugin": "^7.0.2",
     "auto-changelog": "^2.4.0",
-    "esbuild": "^0.20.0",
-    "standardx": "^7.0.0",
+    "eslint": "^8.56.0",
+    "eslint-config-standard": "^17.1.0",
+    "esbuild": "^0.20.1",
     "tap-arc": "^1.2.2",
     "typescript": "^5.3.3"
   },
