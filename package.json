@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "@bicycle-codes/identity": "^0.7.0",
-    "@bicycle-codes/message": "^0.7.0",
+    "@bicycle-codes/message": "^0.7.3",
     "@oddjs/odd": "^0.37.2",
     "@ssc-half-light/util": "^0.11.4",
     "json-canon": "^1.0.1",
@@ -28,7 +28,7 @@
     "uint8arrays": "^5.0.2"
   },
   "devDependencies": {
-    "@nichoth/tapzero": "^0.8.4",
+    "@bicycle-codes/tapzero": "^0.10.3",
     "@ssc-half-light/node-components": "^0.1.22",
     "@typescript-eslint/eslint-plugin": "^8.0.0",
     "@typescript-eslint/parser": "^8.0.0",

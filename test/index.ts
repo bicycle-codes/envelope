@@ -1,4 +1,4 @@
-import { test } from '@nichoth/tapzero'
+import { test } from '@bicycle-codes/tapzero'
 import { create as createId, Identity } from '@bicycle-codes/identity'
 import { createCryptoComponent } from '@ssc-half-light/node-components'
 import { Crypto } from '@oddjs/odd'
