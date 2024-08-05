@@ -19,7 +19,10 @@ let alicesCrypto:Crypto.Implementation
 
 test('create an envelope', async t => {
     alicesCrypto = await createCryptoComponent()
-    alice = await createId(alicesCrypto, { humanName: 'alice' })
+    alice = await createId(alicesCrypto, {
+        humanName: 'alice',
+        humanReadableDeviceName: 'phone'
+    })
     alicesEnvelope = await createEnvelope(alicesCrypto, {
         username: alice.username,
         seq: 1
@@ -39,7 +42,10 @@ let bobsCrypto:Crypto.Implementation
 let bobsKeys:Keys
 test('put a message in the envelope', async t => {
     bobsCrypto = await createCryptoComponent()
-    bob = await createId(bobsCrypto, { humanName: 'bob' })
+    bob = await createId(bobsCrypto, {
+        humanName: 'bob',
+        humanReadableDeviceName: 'phone'
+    })
 
     const content = await createMsg(bobsCrypto, {
         from: { username: bob.username },
@@ -76,7 +82,7 @@ test('check that the envelope is valid', async t => {
         'should say a message is invalid if the sequence number is equal')
 
     try {
-        // @ts-ignore
+        // @ts-expect-error test failure
         await verify('baloney')
     } catch (err) {
         t.ok(err, 'should throw given a malformed message')
