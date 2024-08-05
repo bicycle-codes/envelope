@@ -31,7 +31,7 @@
   "devDependencies": {
     "@nichoth/tapzero": "^0.8.4",
     "@ssc-half-light/node-components": "^0.1.22",
-    "@typescript-eslint/parser": "^7.1.0",
+    "@typescript-eslint/parser": "^8.0.0",
     "@typescript-eslint/eslint-plugin": "^8.0.0",
     "auto-changelog": "^2.4.0",
     "eslint": "^8.56.0",
