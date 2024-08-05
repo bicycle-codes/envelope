@@ -4,7 +4,7 @@ import {
 } from '@bicycle-codes/message'
 import type { SignedMessage } from '@bicycle-codes/message'
 import { fromString, toString } from 'uint8arrays'
-import { Crypto } from '@oddjs/odd'
+import { Implementation } from '@oddjs/odd/components/crypto/implementation'
 import { SymmAlg } from 'keystore-idb/types.js'
 import { writeKeyToDid } from '@ssc-half-light/util'
 import {
@@ -97,13 +97,13 @@ export async function wrapMessage (
 /**
  * Pass in keys if you are the message author, and thus your keys would not
  * be in the message. If you are the recipient, then your key is in the message.
- * @param {Crypto.Implementation} crypto `odd` crypto instance
+ * @param {Implementation} crypto `odd` crypto instance
  * @param {EncryptedContent} msg
  * @param {Record<string, string>} [keys] The message author's keys
  * @returns {Promise<Content>}
  */
 export async function decryptMessage (
-    crypto:Crypto.Implementation,
+    crypto:Implementation,
     msg:EncryptedContent,
     keys?:Record<string, string>
 ):Promise<Content> {
@@ -150,7 +150,7 @@ export async function decryptMessage (
  *   expiration: timestamp to expire, default is 0, which means no expiration
  * @returns {Promise<Envelope>} A serizlizable certificate
  */
-export async function create (crypto:Crypto.Implementation, {
+export async function create (crypto:Implementation, {
     username,
     seq,
     expiration = 0  // no expiration by default
