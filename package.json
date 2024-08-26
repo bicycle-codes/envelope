@@ -19,7 +19,7 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "@bicycle-codes/identity": "^0.7.0",
+    "@bicycle-codes/identity": "^0.9.4",
     "@bicycle-codes/message": "^0.7.3",
     "@oddjs/odd": "^0.37.2",
     "@ssc-half-light/util": "^0.11.4",
