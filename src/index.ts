@@ -4,14 +4,19 @@ import {
 } from '@bicycle-codes/message'
 import type { SignedMessage } from '@bicycle-codes/message'
 import { fromString, toString } from 'uint8arrays'
-import { Implementation } from '@oddjs/odd/components/crypto/implementation'
-import { SymmAlg } from 'keystore-idb/types.js'
-import { writeKeyToDid } from '@ssc-half-light/util'
 import {
-    aesGenKey,
-    aesEncrypt,
-    aesDecrypt,
-} from '@oddjs/odd/components/crypto/implementation/browser'
+    create as aesGenKey,
+    encrypt as aesEncrypt,
+    decrypt as aesDecrypt
+} from '@bicycle-codes/crypto-util/webcrypto/aes'
+// import { Implementation } from '@oddjs/odd/components/crypto/implementation'
+import { SymmAlg } from 'keystore-idb/types.js'
+// import { writeKeyToDid } from '@ssc-half-light/util'
+// import {
+//     aesGenKey,
+//     aesEncrypt,
+//     aesDecrypt,
+// } from '@oddjs/odd/components/crypto/implementation/browser'
 import {
     Identity,
     encryptKey,
@@ -77,7 +82,7 @@ export async function wrapMessage (
     //   of the recipient
 
     // create a key
-    const key = await aesGenKey(ALGORITHM)
+    const key = await aesGenKey({ alg: ALGORITHM })
     // encrypt the key to the recipient,
     // also encrypt the content with the key
     const encryptedContent = await encryptContent(
