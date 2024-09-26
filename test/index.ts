@@ -1,7 +1,5 @@
 import { test } from '@bicycle-codes/tapzero'
-import { create as createId, Identity } from '@bicycle-codes/identity'
-import { createCryptoComponent } from '@ssc-half-light/node-components'
-import { Crypto } from '@oddjs/odd'
+import { Identity } from '@bicycle-codes/identity'
 import {
     create as createEnvelope,
     verify,
@@ -9,21 +7,19 @@ import {
     wrapMessage,
     EncryptedContent,
     decryptMessage,
-    Keys
+    Keys,
 } from '../dist/index.js'
 import { create as createMsg } from '@bicycle-codes/message'
 
 let alicesEnvelope:Envelope
-let alice:Identity
-let alicesCrypto:Crypto.Implementation
+let alice:InstanceType<typeof Identity>
 
 test('create an envelope', async t => {
-    alicesCrypto = await createCryptoComponent()
-    alice = await createId(alicesCrypto, {
+    alice = await Identity.create({
         humanName: 'alice',
         humanReadableDeviceName: 'phone'
     })
-    alicesEnvelope = await createEnvelope(alicesCrypto, {
+    alicesEnvelope = await createEnvelope(alice.signingKey, {
         username: alice.username,
         seq: 1
     })
@@ -36,18 +32,15 @@ test('create an envelope', async t => {
 })
 
 let msgContent:EncryptedContent
+let bobsMsgKeys:Keys
 let bob:Identity
-
-let bobsCrypto:Crypto.Implementation
-let bobsKeys:Keys
 test('put a message in the envelope', async t => {
-    bobsCrypto = await createCryptoComponent()
-    bob = await createId(bobsCrypto, {
+    bob = await Identity.create({
         humanName: 'bob',
         humanReadableDeviceName: 'phone'
     })
 
-    const content = await createMsg(bobsCrypto, {
+    const content = await createMsg(bob.signingKey, {
         from: { username: bob.username },
         text: 'hello'
     })
@@ -57,8 +50,7 @@ test('put a message in the envelope', async t => {
         keys  // map of sender's device name to encrypted key string
     ] = await wrapMessage(bob, alice, alicesEnvelope, content)
 
-    bobsKeys = keys
-
+    bobsMsgKeys = keys
     msgContent = message
 
     t.ok(envelope, 'should return the envelope')
@@ -67,7 +59,7 @@ test('put a message in the envelope', async t => {
     t.equal(envelope.signature, alicesEnvelope.signature,
         'the envelope we get back shoud be equal to what was passed in')
     t.ok(message, 'should return the encrypted content')
-    t.ok(keys, 'should return keys')
+    t.ok(keys, 'should return keys as a separate argument')
 })
 
 test('check that the envelope is valid', async t => {
@@ -90,14 +82,16 @@ test('check that the envelope is valid', async t => {
 })
 
 test('alice can decrypt a message addressed to alice', async t => {
-    const decrypted = await decryptMessage(alicesCrypto, msgContent)
+    const decrypted = await decryptMessage(alice, msgContent)
+
     t.equal(decrypted.from.username, bob.username,
         "should have bob's username in decrypted message")
-    t.equal(decrypted.text, 'hello', 'should have the original text of the message')
+    t.equal(decrypted.text, 'hello', 'can decrypt the message')
 })
 
 test('bob can decrypt a message that he created', async t => {
-    const decrypted = await decryptMessage(bobsCrypto, msgContent, bobsKeys)
+    const decrypted = await decryptMessage(bob, msgContent, bobsMsgKeys)
+
     t.ok(decrypted, 'should decrypt without error')
     t.equal(decrypted.from.username, bob.username,
         'can read the decrypted text')
@@ -106,10 +100,13 @@ test('bob can decrypt a message that he created', async t => {
 
 test("carol cannot read alice's message", async t => {
     t.plan(1)
-    const carolsCrypto = await createCryptoComponent()
+    const carol = await Identity.create({
+        humanName: 'carol',
+        humanReadableDeviceName: 'laptop'
+    })
 
     try {
-        await decryptMessage(carolsCrypto, msgContent)
+        await decryptMessage(carol, msgContent)
         t.fail('should throw with the wrong keys')
     } catch (err) {
         t.ok(err, 'should throw if we use the wrong keys')

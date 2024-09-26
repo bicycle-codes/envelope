@@ -3,27 +3,24 @@ import {
     create as createMsg,
 } from '@bicycle-codes/message'
 import type { SignedMessage } from '@bicycle-codes/message'
-import { fromString, toString } from 'uint8arrays'
+import {
+    DEFAULT_SYMM_LEN,
+    DEFAULT_SYMM_ALGORITHM
+} from '@bicycle-codes/crypto-util/constants'
 import {
     create as aesGenKey,
     encrypt as aesEncrypt,
-    decrypt as aesDecrypt
+    decrypt as aesDecrypt,
 } from '@bicycle-codes/crypto-util/webcrypto/aes'
-// import { Implementation } from '@oddjs/odd/components/crypto/implementation'
-import { SymmAlg } from 'keystore-idb/types.js'
-// import { writeKeyToDid } from '@ssc-half-light/util'
-// import {
-//     aesGenKey,
-//     aesEncrypt,
-//     aesDecrypt,
-// } from '@oddjs/odd/components/crypto/implementation/browser'
 import {
     Identity,
     encryptKey,
-    createDeviceName
 } from '@bicycle-codes/identity'
+import { rsaOperations } from '@bicycle-codes/identity/util'
+import { fromString } from '@bicycle-codes/crypto-util'
 import serialize from 'json-canon'
 
+//
 // {
 //     seq: 0,
 //     expiration: '456',
@@ -31,8 +28,9 @@ import serialize from 'json-canon'
 //     signature: '123abc',
 //     author: 'did:key:abc'
 // }
+//
 
-export const ALGORITHM = SymmAlg.AES_GCM
+export const ALGORITHM = DEFAULT_SYMM_ALGORITHM
 
 export type Envelope = SignedMessage<{
     seq:number,
@@ -82,7 +80,7 @@ export async function wrapMessage (
     //   of the recipient
 
     // create a key
-    const key = await aesGenKey({ alg: ALGORITHM })
+    const key = await aesGenKey({ alg: ALGORITHM, length: DEFAULT_SYMM_LEN })
     // encrypt the key to the recipient,
     // also encrypt the content with the key
     const encryptedContent = await encryptContent(
@@ -100,54 +98,55 @@ export async function wrapMessage (
 }
 
 /**
- * Pass in keys if you are the message author, and thus your keys would not
+ * Pass in keys, if you are the message author, and thus your keys would not
  * be in the message. If you are the recipient, then your key is in the message.
- * @param {Implementation} crypto `odd` crypto instance
- * @param {EncryptedContent} msg
+ *
+ * @param {CryptoKeyPair} keypair The decrypter's keys
+ * @param {EncryptedContent} msg The message to decrypt
  * @param {Record<string, string>} [keys] The message author's keys
  * @returns {Promise<Content>}
  */
 export async function decryptMessage (
-    crypto:Implementation,
+    id:InstanceType<typeof Identity>,
     msg:EncryptedContent,
     keys?:Record<string, string>
 ):Promise<Content> {
     if (keys) {
-        const did = await writeKeyToDid(crypto)
-        const deviceName = await createDeviceName(did)
+        const { deviceName } = id
         const encryptedKey = keys[deviceName]
-
-        const decryptedKey = await crypto.keystore.decrypt(
-            fromString(encryptedKey, 'base64pad')
+        const decryptedKey = await rsaOperations.decrypt(
+            encryptedKey,
+            id.encryptionKey.privateKey
         )
 
         const decryptedMsg = await aesDecrypt(
-            fromString(msg.content, 'base64pad'),
+            msg.content,
             decryptedKey,
             ALGORITHM
         )
 
-        return (JSON.parse(new TextDecoder().decode(decryptedMsg)))
+        return JSON.parse(decryptedMsg)
     }
 
-    const did = await writeKeyToDid(crypto)
-    const deviceName = await createDeviceName(did)
+    const deviceName = id.deviceName
     const encryptedKey = msg.key[deviceName]
-    const decryptedKey = await crypto.keystore.decrypt(
-        fromString(encryptedKey, 'base64pad')
+    const decryptedKey = await rsaOperations.decrypt(
+        encryptedKey,
+        id.encryptionKey.privateKey
     )
 
     const decrypted = await aesDecrypt(
-        fromString(msg.content, 'base64pad'),
+        fromString(msg.content),
         decryptedKey,
         ALGORITHM
     )
 
-    return (JSON.parse(new TextDecoder().decode(decrypted)))
+    return (JSON.parse(decrypted))
 }
 
 /**
  * Create an envelope -- a certificate. Return a signed certificate object
+ *
  * @param crypto odd crypto object
  * @param {{ username:string, seq:number, expiration?:number }} opts
  *   username: your username (the recipient)
@@ -155,12 +154,15 @@ export async function decryptMessage (
  *   expiration: timestamp to expire, default is 0, which means no expiration
  * @returns {Promise<Envelope>} A serizlizable certificate
  */
-export async function create (crypto:Implementation, {
-    username,
-    seq,
-    expiration = 0  // no expiration by default
-}:{ username:string, seq:number, expiration?:number }):Promise<Envelope> {
-    const envelope = await createMsg(crypto, {
+export async function create (
+    // crypto:Implementation,
+    signingKeypair:CryptoKeyPair,
+    {
+        username,
+        seq,
+        expiration = 0  // no expiration by default
+    }:{ username:string, seq:number, expiration?:number }):Promise<Envelope> {
+    const envelope = await createMsg(signingKeypair, {
         seq,
         expiration,
         recipient: username  // our username goes on the envelope
@@ -171,6 +173,7 @@ export async function create (crypto:Implementation, {
 
 /**
  * Take data in string format, and encrypt it with the given symmetric key.
+ *
  * @param key The symmetric key used to encrypt/decrypt
  * @param data The text to encrypt
  * @returns {Promise<{ key:Keys, content:string }>}
@@ -178,14 +181,9 @@ export async function create (crypto:Implementation, {
 export async function encryptContent (
     key:CryptoKey,
     data:string,
-    recipient:Identity
+    recipient:InstanceType<typeof Identity>
 ):Promise<{ key:Keys, content:string }> {
-    const encrypted = arrToString(await aesEncrypt(
-        new TextEncoder().encode(data),
-        key,
-        ALGORITHM
-    ))
-
+    const encrypted = await aesEncrypt(data, key)
     const encryptedKeys = await encryptKeys(recipient, key)
 
     return {
@@ -227,21 +225,12 @@ export function isExpired (envelope:Envelope):boolean {
  * @param key The key we are encrypting
  * @returns {Record<string, string>}
  */
-async function encryptKeys (id:Identity, key:CryptoKey):
-Promise<Keys> {
+async function encryptKeys (id:Identity, key:CryptoKey):Promise<Keys> {
     const encryptedKeys = {}
     for await (const deviceName of Object.keys(id.devices)) {
-        const exchange = id.devices[deviceName].exchange
-        encryptedKeys[deviceName] = await encryptKey(key, arrFromString(exchange))
+        const exchange = id.devices[deviceName].encryptionKey
+        encryptedKeys[deviceName] = await encryptKey(key, exchange)
     }
 
     return encryptedKeys
-}
-
-function arrFromString (str:string) {
-    return fromString(str, 'base64pad')
-}
-
-function arrToString (arr:Uint8Array) {
-    return toString(arr, 'base64pad')
 }

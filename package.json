@@ -1,16 +1,16 @@
 {
   "name": "@bicycle-codes/envelope",
   "version": "0.1.25",
+  "type": "module",
   "description": "Envelopes that have been authorized by the recipient",
   "directories": {
     "test": "test"
   },
-  "type": "module",
   "main": "dist/index.js",
   "scripts": {
     "lint": "eslint \"./**/*.{ts,js}\"",
-    "build-tests": "esbuild test/*.ts --platform=node --format=esm --outdir=test --keep-names",
-    "test": "npm run build && npm run build-tests && NODE_ENV=test node ./test/index.js | tap-spec",
+    "build-tests": "esbuild test/*.ts --bundle --format=esm --outdir=test --keep-names",
+    "test": "npm run build && npm run build-tests && cat ./test/index.js | tape-run | tap-spec",
     "build-cjs": "esbuild src/*.ts --format=cjs --keep-names --outdir=./dist --out-extension:.js=.cjs",
     "build": "mkdir -p ./dist && rm -rf ./dist/* && npm run build-cjs && tsc --project tsconfig.build.json",
     "preversion": "npm run lint",
@@ -19,18 +19,14 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "@bicycle-codes/identity": "^0.7.0",
+    "@bicycle-codes/crypto-util": "^0.1.18",
+    "@bicycle-codes/identity": "^0.9.7",
     "@bicycle-codes/message": "^0.8.3",
-    "@oddjs/odd": "^0.37.2",
-    "@ssc-half-light/util": "^0.11.4",
     "json-canon": "^1.0.1",
-    "keystore-idb": "^0.15.5",
     "uint8arrays": "^5.0.2"
   },
   "devDependencies": {
-    "@bicycle-codes/crypto-util": "^0.1.14",
     "@bicycle-codes/tapzero": "^0.10.3",
-    "@ssc-half-light/node-components": "^0.1.22",
     "@typescript-eslint/eslint-plugin": "^8.0.0",
     "@typescript-eslint/parser": "^8.0.0",
     "auto-changelog": "^2.4.0",
@@ -38,6 +34,7 @@
     "eslint": "^8.57.0",
     "eslint-config-standard": "^17.1.0",
     "tap-spec": "^5.0.0",
+    "tape-run": "^11.0.0",
     "typescript": "^5.5.4"
   },
   "exports": {
@@ -69,7 +66,7 @@
   "bugs": {
     "url": "https://github.com/bicycle-codes/envelope/issues"
   },
-  "homepage": "https://github.com/bicycle-codes/envelope#readme",
+  "homepage": "https://github.com/bicycle-codes/envelope",
   "author": "nichoth <nichoth@nichoth.com> (https://nichoth.com)",
   "license": "SEE LICENSE IN LICENSE"
 }
