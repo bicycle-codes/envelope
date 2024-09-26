@@ -28,6 +28,7 @@
     "uint8arrays": "^5.0.2"
   },
   "devDependencies": {
+    "@bicycle-codes/crypto-util": "^0.1.14",
     "@bicycle-codes/tapzero": "^0.10.3",
     "@ssc-half-light/node-components": "^0.1.22",
     "@typescript-eslint/eslint-plugin": "^8.0.0",
