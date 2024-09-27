@@ -78,7 +78,7 @@ Just a document signed by the recipient, like this:
 ```ts
 import type { SignedMessage } from '@bicycle-codes/message'
 
-export type Envelope = SignedMessage<{
+type Envelope = SignedMessage<{
     seq:number,
     expiration?:number,  // default to 0, which means no expiration
     recipient:string,  // the recipient's username
@@ -178,10 +178,11 @@ import { decryptMessage } from '@bicycle-codes/envelope'
 
 // bobs keys were not in the envelope, because doing so would
 // reveal information about the message author, Bob.
-const decrypted = await decryptMessage(bobsCrypto, msgContent, bobsKeys)
+const decrypted = await decryptMessage(bob, msgContent, bobsMsgKeys)
 
 console.log(decrypted.from.username)
 // => bob
+
 console.log(decrypted.text)
 // => hello
 ```
@@ -214,18 +215,4 @@ test('check that the envelope is valid', async t => {
 
 ----------------------------------
 
-**:question:question**
-
-You would need to do multi-device sync with the map of msg -> keys though. How do you sync multiple devices without leaking information about who wrote the message?
-
-You could encrypt the document of `msg -> keys`, and not check identity when you serve requests. If an unauthorized person requests the keys for a given username, they would not be able to decrypt them, so the server does not need to know who you are.
-
-----------------------------------
-
-The symmetric key for the recipient is in the encrypted message content. The premise is that the recipient will have a [keystore](https://github.com/fission-codes/keystore-idb) instance locally, and will use their local private key to decrypt the symmetric key in the message, then use that symmetric key to decrypt this message content.
-
-We use a two step decryption like that because we are supporting multi-device use. If someone has a handful of devices, then the symmetric key will be encrypted to each device separately, so there are no shared keys.
-
-----------------------
-
-Thanks to @Dominic for sketching this idea.
+Thanks to @Dominic for sketching this idea originally.
