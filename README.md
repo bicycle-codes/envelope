@@ -3,34 +3,54 @@
 [![Socket Badge](https://socket.dev/api/badge/npm/package/@bicycle-codes/envelope)](https://socket.dev/npm/package/@bicycle-codes/envelope)
 [![module](https://img.shields.io/badge/module-ESM-blue?style=flat-square)](README.md)
 [![types](https://img.shields.io/npm/types/@bicycle-codes/envelope?style=flat-square)](README.md)
+[![Common Changelog](https://nichoth.github.io/badge/common-changelog.svg)](./CHANGELOG.md)
+[![semantic versioning](https://img.shields.io/badge/semver-2.0.0-blue?logo=semver&style=flat-square)](https://semver.org/)
+[![install size](https://flat.badgen.net/packagephobia/install/@bicycle-codes/envelope)](https://packagephobia.com/result?p=@bicycle-codes/envelope)
 [![license](https://nichoth.github.io/badge/license-polyform-shield.svg)](LICENSE)
 
-Envelopes that have been authorized by the recipient. This hides the sender's identity, while the recipient is still visible, thus hiding the *metadata* of who is talking to whom via private message. Because the recipient is legible, we can still index messages by recipient.
+Envelopes that have been authorized by the recipient. This hides the sender's identity, while the recipient is still visible. This way we hide the *metadata* of who is talking to whom via private message. But, because the recipient is legible, we can still index messages by recipient.
 
-This supports multiple devices by default because we are using the [Identity](https://github.com/bicycle-codes/identity) module + a [keystore](https://github.com/fission-codes/keystore-idb) per device.
+This supports multiple devices by default because we are using the [Identity](https://github.com/bicycle-codes/identity) module.
 
-We want to give out our send certificates *privately*, without revealing them publicly. Although, we (the recipient) are still able to verify the identity of the message sender.
+Each envelope includes a signature. We want to give out our signed envelopes *privately*, without revealing them publicly.
 
-If we assume we are doing this with internet infrastructure (a server), then in the initial meeting the server would be able to see who we are giving out certificates to because the recipient must be visible. But in subsequent communication, the server would not know who we are talking to, they would just know that we are communicating with someone that we have given a certificate to.
+If we assume we are doing this with internet infrastructure (ie, a server), then in the initial meeting the server would be able to see who we are giving out certificates to because the recipient must be visible. But in subsequent communication, the server would not know who we are talking to, they would just know that we are communicating with someone that we have given a certificate to.
 
-You could also give out the certificates via other means, like on your website, or via signal message, in which case the server would not know who it is from. Meaning, the server cannot even assume that a message is from your 'friend circle' in the application. It can only see that you got a message at a particular time; we can't infer anything about who it is from.
+You could also give out the certificates via some other means, like on your website, or via signal message, in which case the server would not know who it is from. Meaning, the server cannot even assume that a message is from your 'friend circle' in the application. It can only see that you got a message at a particular time; we can't infer anything about who it is from.
 
 This is assuming that all the users of the app are well behaved, and not giving out envelopes willy nilly. :thinking:
 
-**⚠️ possible attack vector** -- what if there is an adversarial user of the app? Could keep it by invitation only.
+## contents
+
+<!-- toc -->
+
+- [metaphors](#metaphors)
+- [Identity](#identity)
+- [an envelope](#an-envelope)
+- [a message in an envelope](#a-message-in-an-envelope)
+- [types](#types)
+  * [Envelope](#envelope)
+  * [EncryptedContent](#encryptedcontent)
+- [API](#api)
+  * [create](#create)
+  * [wrapMessage](#wrapmessage)
+  * [decryptMessage](#decryptmessage)
+  * [verify](#verify)
+
+<!-- tocstop -->
 
 ## metaphors
-If we stick with comparisons to common physical activities, this is pretty much exactly equivalent to the postal service. The envelope shows the recipient, and it needs a stamp (the signature here), but it hides the sender's ID.
+If we stick with comparisons to common physical activities, this is very similar to the postal service. The envelope shows the recipient, and it needs a stamp (the signature here), but it hides the sender's ID.
 
-## keystore
-The envelopes and encrypted messages pair with a [keystore](https://github.com/fission-codes/keystore-idb) instance on your device.
+## Identity
+The envelopes and encrypted messages pair with an [identity instance](https://github.com/bicycle-codes/identity) instance on your device.
 
 We create a symmetric key and encrypt it to various "exchange" keys. The exchange keys are non-extractable key pairs that can only be used on the device where they were created.
 
 That way the documents created by this library can be freely distributed without leaking any keys.
 
 ## an envelope
-Just a document signed by the recipient, like
+Just a document signed by the recipient, like this:
 
 ```js
 // envelope
@@ -48,17 +68,17 @@ Just a document signed by the recipient, like
 ```js
 // the message
 { envelope, content: 'encrypted text' }
-// sender ID is in the content, so that it is only readable by
-// the recipient
+// sender ID is in the content, so it is only readable by
+//   the recipient
 ```
 
 ## types
 
 ### Envelope
 ```ts
-import { SignedRequest } from '@bicycle-codes/message'
+import type { SignedMessage } from '@bicycle-codes/message'
 
-export type Envelope = SignedRequest<{
+export type Envelope = SignedMessage<{
     seq:number,
     expiration?:number,  // default to 0, which means no expiration
     recipient:string,  // the recipient's username
@@ -81,19 +101,15 @@ interface EncryptedContent {
 Create an envelope.
 
 ```ts
-import { SignedRequest } from '@ssc-bicycle-codes/message'
-
-export type Envelope = SignedRequest<{
-    seq:number,
-    expiration:number,
-    recipient:string,  // the recipient's username
-}>
-
-export async function create (crypto:Crypto.Implementation, {
-    username,
-    seq,
-    expiration = 0  // no expiration by default
-}:{ username:string, seq:number, expiration:number }) => Promise<Envelope>
+async function create (
+    // crypto:Implementation,
+    signingKeypair:CryptoKeyPair,
+    {
+        username,
+        seq,
+        expiration = 0  // no expiration by default
+    }:{ username:string, seq:number, expiration?:number }
+):Promise<Envelope>
 ```
 
 ### wrapMessage
@@ -103,21 +119,8 @@ This will encrypt the AES key to every device in the recipient identity, as well
 
 ```ts
 import { Identity } from '@bicycle-codes/identity'
-import { SignedRequest } from '@ssc-bicycle-codes/message'
 
-type Content = SignedRequest<{
-    from:{ username:string },
-    text:string,
-    mentions?:string[],
-}>
-
-export type Envelope = SignedRequest<{
-    seq:number,
-    expiration:number,
-    recipient:string,  // the recipient's username
-}>
-
-export async function wrapMessage (
+async function wrapMessage (
     me:Identity,
     recipient:Identity,  // because we need to encrypt the message to the recipient
     envelope:Envelope,
