@@ -5,7 +5,7 @@
 [![types](https://img.shields.io/npm/types/@bicycle-codes/envelope?style=flat-square)](README.md)
 [![Common Changelog](https://nichoth.github.io/badge/common-changelog.svg)](./CHANGELOG.md)
 [![semantic versioning](https://img.shields.io/badge/semver-2.0.0-blue?logo=semver&style=flat-square)](https://semver.org/)
-[![install size](https://flat.badgen.net/packagephobia/install/@bicycle-codes/envelope)](https://packagephobia.com/result?p=@bicycle-codes/envelope)
+[![install size](https://packagephobia.com/badge?p=@bicycle-codes/envelope)](https://packagephobia.com/result?p=@bicycle-codes/envelope)
 [![license](https://nichoth.github.io/badge/license-polyform-shield.svg)](LICENSE)
 
 Envelopes that have been authorized by the recipient. This hides the sender's identity, while the recipient is still visible. This way we hide the *metadata* of who is talking to whom via private message. But, because the recipient is legible, we can still index messages by recipient.
