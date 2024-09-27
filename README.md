@@ -1,7 +1,7 @@
 # envelope
 ![tests](https://github.com/bicycle-codes/envelope/actions/workflows/nodejs.yml/badge.svg)
 [![Socket Badge](https://socket.dev/api/badge/npm/package/@bicycle-codes/envelope)](https://socket.dev/npm/package/@bicycle-codes/envelope)
-[![module](https://img.shields.io/badge/module-ESM-blue?style=flat-square)](README.md)
+[![module](https://img.shields.io/badge/module-ESM%2FCJS-blue?style=flat-square)](README.md)
 [![types](https://img.shields.io/npm/types/@bicycle-codes/envelope?style=flat-square)](README.md)
 [![Common Changelog](https://nichoth.github.io/badge/common-changelog.svg)](./CHANGELOG.md)
 [![semantic versioning](https://img.shields.io/badge/semver-2.0.0-blue?logo=semver&style=flat-square)](https://semver.org/)
