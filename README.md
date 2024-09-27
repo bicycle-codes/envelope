@@ -215,4 +215,4 @@ test('check that the envelope is valid', async t => {
 
 ----------------------------------
 
-Thanks to @Dominic for sketching this idea originally.
+Thanks to [@Dominic](https://github.com/dominictarr/) for sketching this idea originally.
