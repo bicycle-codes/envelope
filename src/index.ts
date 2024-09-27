@@ -61,14 +61,15 @@ export interface EncryptedContent {
  * the message to the recipient.
  * @param envelope The envelope we are putting it in
  * @param content The content that will be encrypted to the recipient
- * @returns [message, <sender's keys>]
+ * @returns {[{ envelope:Envelope, message:EncryptedContent }, Keys]}
+ *
  * Return an array of [message, keys], where keys is a map of the sender's devices
  * to the symmetric key encrypted to that device. This is returned as a separate
  * object because we *don't* want the sender device names to be in the message.
  */
 export async function wrapMessage (
     me:Identity,
-    recipient:Identity,  // because we need to encrypt the message to the recipient
+    recipient:Identity,  // we need to encrypt the message to the recipient
     envelope:Envelope,
     content:Content
 ):Promise<[{
