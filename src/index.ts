@@ -161,7 +161,8 @@ export async function create (
         username,
         seq,
         expiration = 0  // no expiration by default
-    }:{ username:string, seq:number, expiration?:number }):Promise<Envelope> {
+    }:{ username:string, seq:number, expiration?:number }
+):Promise<Envelope> {
     const envelope = await createMsg(signingKeypair, {
         seq,
         expiration,
