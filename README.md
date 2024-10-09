@@ -14,7 +14,7 @@ This supports multiple devices by default because we are using the [Identity](ht
 
 Each envelope includes a signature. We want to give out our signed envelopes *privately*, without revealing them publicly.
 
-If we assume we are doing this with internet infrastructure (ie, a server), then in the initial meeting the server would be able to see who we are giving out certificates to because the recipient must be visible. But in subsequent communication, the server would not know who we are talking to, they would just know that we are communicating with someone that we have given a certificate to.
+If we assume we are doing this with internet infrastructure (ie, a server), then in the initial meeting the server would be able to see who we are giving out certificates to because the recipient must be visible. But in subsequent communication, the server would not know who we are talking to; they would just know that we are communicating with someone that we have given a certificate to.
 
 You could also give out the certificates via some other means, like on your website, or via signal message, in which case the server would not know who it is from. Meaning, the server cannot even assume that a message is from your 'friend circle' in the application. It can only see that you got a message at a particular time; we can't infer anything about who it is from.
 
