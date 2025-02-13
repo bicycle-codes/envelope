@@ -29,4 +29,5 @@ jobs:
           CI: true
       - name: Run tests
         run: |
+          npm run build-tests
           xvfb-run --server-args="-screen 0 1920x1080x24" npm test
