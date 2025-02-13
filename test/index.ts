@@ -1,4 +1,4 @@
-import { test } from '@bicycle-codes/tapzero'
+import { test } from '@substrate-system/tapzero'
 import { Identity } from '@bicycle-codes/identity'
 import {
     create as createEnvelope,
