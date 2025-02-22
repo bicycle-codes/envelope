@@ -16,10 +16,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-      - name: create env file
-        run: |
-          touch .env
-          echo "NPM_TOKEN=${{ secrets.NPM_TOKEN }}" >> .env
       - name: npm install, build
         run: |
           npm install
@@ -27,7 +23,7 @@ jobs:
           npm run lint
         env:
           CI: true
-      - name: Run tests
+      - name: Run tape tests
         run: |
           npm run build-tests
           xvfb-run --server-args="-screen 0 1920x1080x24" npm test
