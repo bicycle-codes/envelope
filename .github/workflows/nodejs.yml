@@ -3,7 +3,7 @@ run-name: testing in node
 on: [push]
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     timeout-minutes: 5
 
     strategy:
@@ -26,4 +26,4 @@ jobs:
       - name: Run tape tests
         run: |
           npm run build-tests
-          xvfb-run --server-args="-screen 0 1920x1080x24" npm test
+          xvfb-run --server-args="-screen 0 1920x1080x24" npm run test-tape-run
